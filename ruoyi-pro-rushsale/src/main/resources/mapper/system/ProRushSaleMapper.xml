@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ProRushSaleMapper">
+    
+    <resultMap type="ProRushSale" id="ProRushSaleResult">
+        <result property="proRushSaleId"    column="pro_rush_sale_id"    />
+        <result property="goodsName"    column="goods_name"    />
+        <result property="specs"    column="specs"    />
+        <result property="picture"    column="picture"    />
+        <result property="color"    column="color"    />
+        <result property="purchasePrice"    column="purchase_price"    />
+        <result property="inPrice"    column="in_price"    />
+        <result property="outPrice"    column="out_price"    />
+        <result property="purchasePeople"    column="purchase_people"    />
+        <result property="inPeople"    column="in_people"    />
+        <result property="outPeople"    column="out_people"    />
+        <result property="inSettleModel"    column="in_settle_model"    />
+        <result property="outSettleModel"    column="out_settle_model"    />
+        <result property="buyTime"    column="buy_time"    />
+        <result property="inTime"    column="in_time"    />
+        <result property="outTime"    column="out_time"    />
+        <result property="outMomeyTime"    column="out_momey_time"    />
+        <result property="inMomeyTime"    column="in_momey_time"    />
+        <result property="buyFrom"    column="buy_from"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectProRushSaleVo">
+        select pro_rush_sale_id, goods_name, specs, picture, color, purchase_price, in_price, out_price, purchase_people, in_people, out_people, in_settle_model, out_settle_model, buy_time, in_time, out_time, out_momey_time, in_momey_time, buy_from, quantity,remark
+        from pro_rush_sale
+        left join sys_dept d on d.dept_id = pro_rush_sale.dept_id
+
+    </sql>
+
+    <select id="selectProRushSaleList" parameterType="ProRushSale" resultMap="ProRushSaleResult">
+        <include refid="selectProRushSaleVo"/>
+        where 1=1
+            <if test="goodsName != null  and goodsName != ''"> and goods_name like concat('%', #{goodsName}, '%')</if>
+            <if test="specs != null  and specs != ''"> and specs = #{specs}</if>
+            <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
+            <if test="color != null  and color != ''"> and color = #{color}</if>
+            <if test="purchasePrice != null  and purchasePrice != ''"> and purchase_price = #{purchasePrice}</if>
+            <if test="inPrice != null  and inPrice != ''"> and in_price = #{inPrice}</if>
+            <if test="outPrice != null  and outPrice != ''"> and out_price = #{outPrice}</if>
+            <if test="purchasePeople != null  and purchasePeople != ''"> and purchase_people like concat('%', #{purchasePeople}, '%')</if>
+            <if test="inPeople != null  and inPeople != ''"> and in_people like concat('%', #{inPeople}, '%')</if>
+            <if test="outPeople != null  and outPeople != ''"> and out_people = #{outPeople}</if>
+            <if test="inSettleModel != null  and inSettleModel != ''"> and in_settle_model  like concat('%', #{inSettleModel}, '%')</if>
+            <if test="outSettleModel != null  and outSettleModel != ''"> and out_settle_model = #{outSettleModel}</if>
+            <if test="buyTime != null "> and buy_time >= #{buyTime}</if>
+            <if test="inTime != null "> and in_time >= #{inTime}</if>
+            <if test="outTime != null "> and out_time >= #{outTime}</if>
+            <if test="outMomeyTime != null "> and out_momey_time >= #{outMomeyTime}</if>
+            <if test="inMomeyTime != null "> and in_momey_time >= #{inMomeyTime}</if>
+            <if test="buyFrom != null  and buyFrom != ''"> and buy_from = #{buyFrom}</if>
+        ${params.dataScope}
+    </select>
+    
+    <select id="selectProRushSaleByProRushSaleId" parameterType="Long" resultMap="ProRushSaleResult">
+        <include refid="selectProRushSaleVo"/>
+        where pro_rush_sale_id = #{proRushSaleId}
+    </select>
+        
+    <insert id="insertProRushSale" parameterType="ProRushSale" useGeneratedKeys="true" keyProperty="proRushSaleId">
+        insert into pro_rush_sale
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsName != null">goods_name,</if>
+            <if test="specs != null">specs,</if>
+            <if test="picture != null">picture,</if>
+            <if test="color != null">color,</if>
+            <if test="purchasePrice != null">purchase_price,</if>
+            <if test="inPrice != null">in_price,</if>
+            <if test="outPrice != null">out_price,</if>
+            <if test="purchasePeople != null">purchase_people,</if>
+            <if test="inPeople != null">in_people,</if>
+            <if test="outPeople != null">out_people,</if>
+            <if test="inSettleModel != null">in_settle_model,</if>
+            <if test="outSettleModel != null">out_settle_model,</if>
+            <if test="buyTime != null">buy_time,</if>
+            <if test="inTime != null">in_time,</if>
+            <if test="outTime != null">out_time,</if>
+            <if test="outMomeyTime != null">out_momey_time,</if>
+            <if test="inMomeyTime != null">in_momey_time,</if>
+            <if test="buyFrom != null">buy_from,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsName != null">#{goodsName},</if>
+            <if test="specs != null">#{specs},</if>
+            <if test="picture != null">#{picture},</if>
+            <if test="color != null">#{color},</if>
+            <if test="purchasePrice != null">#{purchasePrice},</if>
+            <if test="inPrice != null">#{inPrice},</if>
+            <if test="outPrice != null">#{outPrice},</if>
+            <if test="purchasePeople != null">#{purchasePeople},</if>
+            <if test="inPeople != null">#{inPeople},</if>
+            <if test="outPeople != null">#{outPeople},</if>
+            <if test="inSettleModel != null">#{inSettleModel},</if>
+            <if test="outSettleModel != null">#{outSettleModel},</if>
+            <if test="buyTime != null">#{buyTime},</if>
+            <if test="inTime != null">#{inTime},</if>
+            <if test="outTime != null">#{outTime},</if>
+            <if test="outMomeyTime != null">#{outMomeyTime},</if>
+            <if test="inMomeyTime != null">#{inMomeyTime},</if>
+            <if test="buyFrom != null">#{buyFrom},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProRushSale" parameterType="ProRushSale">
+        update pro_rush_sale
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsName != null">goods_name = #{goodsName},</if>
+            <if test="specs != null">specs = #{specs},</if>
+            <if test="picture != null">picture = #{picture},</if>
+            <if test="color != null">color = #{color},</if>
+            <if test="purchasePrice != null">purchase_price = #{purchasePrice},</if>
+            <if test="inPrice != null">in_price = #{inPrice},</if>
+            <if test="outPrice != null">out_price = #{outPrice},</if>
+            <if test="purchasePeople != null">purchase_people = #{purchasePeople},</if>
+            <if test="inPeople != null">in_people = #{inPeople},</if>
+            <if test="outPeople != null">out_people = #{outPeople},</if>
+            <if test="inSettleModel != null">in_settle_model = #{inSettleModel},</if>
+            <if test="outSettleModel != null">out_settle_model = #{outSettleModel},</if>
+            <if test="buyTime != null">buy_time = #{buyTime},</if>
+            <if test="inTime != null">in_time = #{inTime},</if>
+            <if test="outTime != null">out_time = #{outTime},</if>
+            <if test="outMomeyTime != null">out_momey_time = #{outMomeyTime},</if>
+            <if test="inMomeyTime != null">in_momey_time = #{inMomeyTime},</if>
+            <if test="buyFrom != null">buy_from = #{buyFrom},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where pro_rush_sale_id = #{proRushSaleId}
+    </update>
+
+    <delete id="deleteProRushSaleByProRushSaleId" parameterType="Long">
+        delete from pro_rush_sale where pro_rush_sale_id = #{proRushSaleId}
+    </delete>
+
+    <delete id="deleteProRushSaleByProRushSaleIds" parameterType="String">
+        delete from pro_rush_sale where pro_rush_sale_id in 
+        <foreach item="proRushSaleId" collection="array" open="(" separator="," close=")">
+            #{proRushSaleId}
+        </foreach>
+    </delete>
+</mapper>

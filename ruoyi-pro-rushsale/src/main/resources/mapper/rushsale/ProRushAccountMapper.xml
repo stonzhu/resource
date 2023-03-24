@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.rushsale.mapper.ProRushAccountMapper">
+    
+    <resultMap type="ProRushAccount" id="ProRushAccountResult">
+        <result property="accountId"    column="account_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="capital"    column="capital"    />
+        <result property="income"    column="income"    />
+        <result property="profit"    column="profit"    />
+        <result property="netProfit"    column="net_profit"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectProRushAccountVo">
+        select account_id, user_id, dept_id, capital, income, profit, net_profit, create_time, update_by, update_time, remark from pro_rush_account
+    </sql>
+
+    <select id="selectProRushAccountList" parameterType="ProRushAccount" resultMap="ProRushAccountResult">
+        <include refid="selectProRushAccountVo"/>
+        <where>  
+            <if test="capital != null "> and capital = #{capital}</if>
+            <if test="income != null "> and income = #{income}</if>
+            <if test="profit != null "> and profit = #{profit}</if>
+            <if test="netProfit != null "> and net_profit = #{netProfit}</if>
+        </where>
+    </select>
+    
+    <select id="selectProRushAccountByAccountId" parameterType="Long" resultMap="ProRushAccountResult">
+        <include refid="selectProRushAccountVo"/>
+        where account_id = #{accountId}
+    </select>
+        
+    <insert id="insertProRushAccount" parameterType="ProRushAccount" useGeneratedKeys="true" keyProperty="accountId">
+        insert into pro_rush_account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="capital != null">capital,</if>
+            <if test="income != null">income,</if>
+            <if test="profit != null">profit,</if>
+            <if test="netProfit != null">net_profit,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="capital != null">#{capital},</if>
+            <if test="income != null">#{income},</if>
+            <if test="profit != null">#{profit},</if>
+            <if test="netProfit != null">#{netProfit},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProRushAccount" parameterType="ProRushAccount">
+        update pro_rush_account
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="capital != null">capital = #{capital},</if>
+            <if test="income != null">income = #{income},</if>
+            <if test="profit != null">profit = #{profit},</if>
+            <if test="netProfit != null">net_profit = #{netProfit},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where account_id = #{accountId}
+    </update>
+
+    <delete id="deleteProRushAccountByAccountId" parameterType="Long">
+        delete from pro_rush_account where account_id = #{accountId}
+    </delete>
+
+    <delete id="deleteProRushAccountByAccountIds" parameterType="String">
+        delete from pro_rush_account where account_id in 
+        <foreach item="accountId" collection="array" open="(" separator="," close=")">
+            #{accountId}
+        </foreach>
+    </delete>
+</mapper>

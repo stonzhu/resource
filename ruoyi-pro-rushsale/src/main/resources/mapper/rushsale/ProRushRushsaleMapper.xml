@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.rushsale.mapper.ProRushRushsaleMapper">
+    
+    <resultMap type="ProRushRushsale" id="ProRushRushsaleResult">
+        <result property="rushsaleId"    column="rushsale_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="purchaseId"    column="purchase_id"    />
+        <result property="payPrice"    column="pay_price"    />
+        <result property="payTime"    column="pay_time"    />
+        <result property="payFrom"    column="pay_from"    />
+        <result property="payType"    column="pay_type"    />
+        <result property="dealPrice"    column="deal_price"    />
+        <result property="dealState"    column="deal_state"    />
+        <result property="rushState"    column="rush_state"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectProRushRushsaleVo">
+        select rushsale_id, user_id, dept_id, purchase_id, pay_price, pay_time, pay_from, pay_type, deal_price, deal_state, rush_state, create_time, update_by, update_time, remark from pro_rush_rushsale
+    </sql>
+
+    <select id="selectProRushRushsaleList" parameterType="ProRushRushsale" resultMap="ProRushRushsaleResult">
+        <include refid="selectProRushRushsaleVo"/>
+        <where>  
+            <if test="purchaseId != null "> and purchase_id = #{purchaseId}</if>
+            <if test="payTime != null "> and pay_time &lt;= #{payTime}</if>
+            <if test="payFrom != null  and payFrom != ''"> and pay_from like concat('%', #{payFrom}, '%')</if>
+            <if test="payType != null  and payType != ''"> and pay_type = #{payType}</if>
+            <if test="dealState != null  and dealState != ''"> and deal_state = #{dealState}</if>
+            <if test="rushState != null  and rushState != ''"> and rush_state = #{rushState}</if>
+        </where>
+    </select>
+    
+    <select id="selectProRushRushsaleByRushsaleId" parameterType="Long" resultMap="ProRushRushsaleResult">
+        <include refid="selectProRushRushsaleVo"/>
+        where rushsale_id = #{rushsaleId}
+    </select>
+        
+    <insert id="insertProRushRushsale" parameterType="ProRushRushsale" useGeneratedKeys="true" keyProperty="rushsaleId">
+        insert into pro_rush_rushsale
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="purchaseId != null">purchase_id,</if>
+            <if test="payPrice != null">pay_price,</if>
+            <if test="payTime != null">pay_time,</if>
+            <if test="payFrom != null">pay_from,</if>
+            <if test="payType != null">pay_type,</if>
+            <if test="dealPrice != null">deal_price,</if>
+            <if test="dealState != null">deal_state,</if>
+            <if test="rushState != null">rush_state,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="purchaseId != null">#{purchaseId},</if>
+            <if test="payPrice != null">#{payPrice},</if>
+            <if test="payTime != null">#{payTime},</if>
+            <if test="payFrom != null">#{payFrom},</if>
+            <if test="payType != null">#{payType},</if>
+            <if test="dealPrice != null">#{dealPrice},</if>
+            <if test="dealState != null">#{dealState},</if>
+            <if test="rushState != null">#{rushState},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProRushRushsale" parameterType="ProRushRushsale">
+        update pro_rush_rushsale
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="purchaseId != null">purchase_id = #{purchaseId},</if>
+            <if test="payPrice != null">pay_price = #{payPrice},</if>
+            <if test="payTime != null">pay_time = #{payTime},</if>
+            <if test="payFrom != null">pay_from = #{payFrom},</if>
+            <if test="payType != null">pay_type = #{payType},</if>
+            <if test="dealPrice != null">deal_price = #{dealPrice},</if>
+            <if test="dealState != null">deal_state = #{dealState},</if>
+            <if test="rushState != null">rush_state = #{rushState},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where rushsale_id = #{rushsaleId}
+    </update>
+
+    <delete id="deleteProRushRushsaleByRushsaleId" parameterType="Long">
+        delete from pro_rush_rushsale where rushsale_id = #{rushsaleId}
+    </delete>
+
+    <delete id="deleteProRushRushsaleByRushsaleIds" parameterType="String">
+        delete from pro_rush_rushsale where rushsale_id in 
+        <foreach item="rushsaleId" collection="array" open="(" separator="," close=")">
+            #{rushsaleId}
+        </foreach>
+    </delete>
+</mapper>

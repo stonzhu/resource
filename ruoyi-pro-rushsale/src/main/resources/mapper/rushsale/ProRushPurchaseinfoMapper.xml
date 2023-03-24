@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.rushsale.mapper.ProRushPurchaseinfoMapper">
+    
+    <resultMap type="ProRushPurchaseinfo" id="ProRushPurchaseinfoResult">
+        <result property="purchaseId"    column="purchase_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="purchName"    column="purch_name"    />
+        <result property="phoneNum"    column="phone_num"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="buyFrom"    column="buy_from"    />
+        <result property="buyPrice"    column="buy_price"    />
+        <result property="buyTime"    column="buy_time"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="machineId"    column="machine_id"    />
+        <result property="orderState"    column="order_state"    />
+        <result property="dealState"    column="deal_state"    />
+        <result property="arrivalTime"    column="arrival_time"    />
+        <result property="dealPrice"    column="deal_price"    />
+        <result property="dealTime"    column="deal_time"    />
+        <result property="rushState"    column="rush_state"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectProRushPurchaseinfoVo">
+        select purchase_id, user_id, dept_id, purch_name, phone_num, goods_id, buy_from, buy_price, buy_time, order_num, machine_id, order_state, deal_state, arrival_time, deal_price, deal_time, rush_state, create_time, update_by, update_time, remark from pro_rush_purchaseinfo
+    </sql>
+
+    <select id="selectProRushPurchaseinfoList" parameterType="ProRushPurchaseinfo" resultMap="ProRushPurchaseinfoResult">
+        <include refid="selectProRushPurchaseinfoVo"/>
+        <where>  
+            <if test="purchName != null  and purchName != ''"> and purch_name like concat('%', #{purchName}, '%')</if>
+            <if test="phoneNum != null  and phoneNum != ''"> and phone_num like concat('%', #{phoneNum}, '%')</if>
+            <if test="goodsId != null "> and goods_id = #{goodsId}</if>
+            <if test="buyFrom != null  and buyFrom != ''"> and buy_from = #{buyFrom}</if>
+            <if test="buyTime != null "> and buy_time &lt;= #{buyTime}</if>
+            <if test="orderNum != null  and orderNum != ''"> and order_num like concat('%', #{orderNum}, '%')</if>
+            <if test="machineId != null  and machineId != ''"> and machine_id like concat('%', #{machineId}, '%')</if>
+            <if test="orderState != null  and orderState != ''"> and order_state = #{orderState}</if>
+            <if test="dealState != null  and dealState != ''"> and deal_state = #{dealState}</if>
+            <if test="arrivalTime != null "> and arrival_time &lt;= #{arrivalTime}</if>
+            <if test="dealTime != null "> and deal_time &lt;= #{dealTime}</if>
+            <if test="rushState != null  and rushState != ''"> and rush_state = #{rushState}</if>
+        </where>
+    </select>
+    
+    <select id="selectProRushPurchaseinfoByPurchaseId" parameterType="Long" resultMap="ProRushPurchaseinfoResult">
+        <include refid="selectProRushPurchaseinfoVo"/>
+        where purchase_id = #{purchaseId}
+    </select>
+        
+    <insert id="insertProRushPurchaseinfo" parameterType="ProRushPurchaseinfo" useGeneratedKeys="true" keyProperty="purchaseId">
+        insert into pro_rush_purchaseinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="purchName != null">purch_name,</if>
+            <if test="phoneNum != null">phone_num,</if>
+            <if test="goodsId != null">goods_id,</if>
+            <if test="buyFrom != null">buy_from,</if>
+            <if test="buyPrice != null">buy_price,</if>
+            <if test="buyTime != null">buy_time,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="machineId != null">machine_id,</if>
+            <if test="orderState != null">order_state,</if>
+            <if test="dealState != null">deal_state,</if>
+            <if test="arrivalTime != null">arrival_time,</if>
+            <if test="dealPrice != null">deal_price,</if>
+            <if test="dealTime != null">deal_time,</if>
+            <if test="rushState != null">rush_state,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="purchName != null">#{purchName},</if>
+            <if test="phoneNum != null">#{phoneNum},</if>
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="buyFrom != null">#{buyFrom},</if>
+            <if test="buyPrice != null">#{buyPrice},</if>
+            <if test="buyTime != null">#{buyTime},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+            <if test="machineId != null">#{machineId},</if>
+            <if test="orderState != null">#{orderState},</if>
+            <if test="dealState != null">#{dealState},</if>
+            <if test="arrivalTime != null">#{arrivalTime},</if>
+            <if test="dealPrice != null">#{dealPrice},</if>
+            <if test="dealTime != null">#{dealTime},</if>
+            <if test="rushState != null">#{rushState},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProRushPurchaseinfo" parameterType="ProRushPurchaseinfo">
+        update pro_rush_purchaseinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="purchName != null">purch_name = #{purchName},</if>
+            <if test="phoneNum != null">phone_num = #{phoneNum},</if>
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="buyFrom != null">buy_from = #{buyFrom},</if>
+            <if test="buyPrice != null">buy_price = #{buyPrice},</if>
+            <if test="buyTime != null">buy_time = #{buyTime},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="machineId != null">machine_id = #{machineId},</if>
+            <if test="orderState != null">order_state = #{orderState},</if>
+            <if test="dealState != null">deal_state = #{dealState},</if>
+            <if test="arrivalTime != null">arrival_time = #{arrivalTime},</if>
+            <if test="dealPrice != null">deal_price = #{dealPrice},</if>
+            <if test="dealTime != null">deal_time = #{dealTime},</if>
+            <if test="rushState != null">rush_state = #{rushState},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where purchase_id = #{purchaseId}
+    </update>
+
+    <delete id="deleteProRushPurchaseinfoByPurchaseId" parameterType="Long">
+        delete from pro_rush_purchaseinfo where purchase_id = #{purchaseId}
+    </delete>
+
+    <delete id="deleteProRushPurchaseinfoByPurchaseIds" parameterType="String">
+        delete from pro_rush_purchaseinfo where purchase_id in 
+        <foreach item="purchaseId" collection="array" open="(" separator="," close=")">
+            #{purchaseId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.rushsale.mapper.ProRushDealinfoMapper">
+    
+    <resultMap type="ProRushDealinfo" id="ProRushDealinfoResult">
+        <result property="dealId"    column="deal_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="dealFrom"    column="deal_from"    />
+        <result property="dealTo"    column="deal_to"    />
+        <result property="dealNum"    column="deal_num"    />
+        <result property="dealType"    column="deal_type"    />
+        <result property="handleOrderId"    column="handle_order_id"    />
+        <result property="dealTime"    column="deal_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectProRushDealinfoVo">
+        select deal_id, user_id, dept_id, goods_id, deal_from, deal_to, deal_num, deal_type, handle_order_id, deal_time, create_time, update_by, update_time, remark from pro_rush_dealinfo
+    </sql>
+
+    <select id="selectProRushDealinfoList" parameterType="ProRushDealinfo" resultMap="ProRushDealinfoResult">
+        <include refid="selectProRushDealinfoVo"/>
+        <where>  
+            <if test="goodsId != null "> and goods_id = #{goodsId}</if>
+            <if test="dealFrom != null  and dealFrom != ''"> and deal_from = #{dealFrom}</if>
+            <if test="dealTo != null  and dealTo != ''"> and deal_to = #{dealTo}</if>
+            <if test="handleOrderId != null "> and handle_order_id = #{handleOrderId}</if>
+            <if test="dealTime != null "> and deal_time &lt;= #{dealTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectProRushDealinfoByDealId" parameterType="Long" resultMap="ProRushDealinfoResult">
+        <include refid="selectProRushDealinfoVo"/>
+        where deal_id = #{dealId}
+    </select>
+        
+    <insert id="insertProRushDealinfo" parameterType="ProRushDealinfo">
+        insert into pro_rush_dealinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dealId != null">deal_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="goodsId != null">goods_id,</if>
+            <if test="dealFrom != null">deal_from,</if>
+            <if test="dealTo != null">deal_to,</if>
+            <if test="dealNum != null">deal_num,</if>
+            <if test="dealType != null">deal_type,</if>
+            <if test="handleOrderId != null">handle_order_id,</if>
+            <if test="dealTime != null">deal_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dealId != null">#{dealId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="dealFrom != null">#{dealFrom},</if>
+            <if test="dealTo != null">#{dealTo},</if>
+            <if test="dealNum != null">#{dealNum},</if>
+            <if test="dealType != null">#{dealType},</if>
+            <if test="handleOrderId != null">#{handleOrderId},</if>
+            <if test="dealTime != null">#{dealTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProRushDealinfo" parameterType="ProRushDealinfo">
+        update pro_rush_dealinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="dealFrom != null">deal_from = #{dealFrom},</if>
+            <if test="dealTo != null">deal_to = #{dealTo},</if>
+            <if test="dealNum != null">deal_num = #{dealNum},</if>
+            <if test="dealType != null">deal_type = #{dealType},</if>
+            <if test="handleOrderId != null">handle_order_id = #{handleOrderId},</if>
+            <if test="dealTime != null">deal_time = #{dealTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where deal_id = #{dealId}
+    </update>
+
+    <delete id="deleteProRushDealinfoByDealId" parameterType="Long">
+        delete from pro_rush_dealinfo where deal_id = #{dealId}
+    </delete>
+
+    <delete id="deleteProRushDealinfoByDealIds" parameterType="String">
+        delete from pro_rush_dealinfo where deal_id in 
+        <foreach item="dealId" collection="array" open="(" separator="," close=")">
+            #{dealId}
+        </foreach>
+    </delete>
+</mapper>
