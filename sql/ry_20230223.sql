@@ -630,7 +630,7 @@ create table sys_notice (
   update_time       datetime                                   comment '更新时间',
   remark            varchar(255)    default null               comment '备注',
   primary key (notice_id)
-) engine=innodb auto_increment=10 comment = '通知公告表';
+) engine=innodb auto_increment=1 comment = '通知公告表';
 
 -- ----------------------------
 -- 初始化-公告信息表数据
@@ -697,3 +697,177 @@ create table gen_table_column (
   update_time       datetime                                   comment '更新时间',
   primary key (column_id)
 ) engine=innodb auto_increment=1 comment = '代码生成业务表字段';
+
+
+-- ----------------------------
+-- 18、抢购买卖表
+-- ----------------------------
+drop table if exists pro_rush_sale;
+create table pro_rush_sale (
+       pro_rush_sale_id      bigint(20)          not null auto_increment    comment '抢购买卖ID',
+       user_id      bigint(20)          default ''    comment '用户ID',
+       dept_id      bigint(20)          default null    comment '部门id',
+       goods_name      varchar(50)     default ''                   comment '物品名称',
+       specs      varchar(50)     default ''                   comment '规格',
+       picture      varchar(50)     default ''                  comment '物品图片',
+       color       varchar(15)         default ''                   comment '颜色',
+       purchase_price    varchar(10)        default ''               comment '采购价格',
+       in_price    varchar(10)        default ''               comment '购入价格',
+       out_price    varchar(10)        default ''               comment '结算价格',
+       purchase_people            varchar(50)         default ''       comment '采购人',
+       in_people            varchar(50)         default ''       comment '购入人',
+       out_people            varchar(50)         default ''       comment '结算人',
+       in_settle_model    varchar(10)        default ''               comment '购入结算方式',
+       out_settle_model    varchar(10)        default ''               comment '支出结算方式',
+       buy_time       datetime                                   comment '采购时间',
+       in_time       datetime                                   comment '转入时间',
+       out_time       datetime                                   comment '转出时间',
+       out_momey_time       datetime                                   comment '购入结算时间',
+       in_momey_time       datetime                                   comment '出手结算时间',
+       buy_from       varchar(10)                                    comment '购入渠道',
+       quantity    varchar(5)                                    comment '数量',
+       create_time       datetime                                   comment '创建时间',
+       update_by         varchar(50)     default ''                 comment '更新者',
+       update_time       datetime                                   comment '更新时间',
+       remark            varchar(255)    default null               comment '备注',
+       primary key (pro_rush_sale_id)
+) engine=innodb auto_increment=1 comment = '抢购买卖表';
+
+
+
+-- ---------------------------------------rushsale模块表------------------------------------
+
+/*==============================================================*/
+/* DBMS name:      MySQL 5.0                                    */
+/* Created on:     2023-3-24 16:00:15                           */
+/*==============================================================*/
+
+
+drop table if exists pro_rush_goods;
+
+drop table if exists pro_rush_account;
+
+drop table if exists pro_rush_dealinfo;
+
+drop table if exists pro_rush_purchaseInfo;
+
+drop table if exists pro_rush_rushsale;
+
+/*==============================================================*/
+/* Table: goods                                                 */
+/*==============================================================*/
+create table pro_rush_goods
+(
+    goods_id             bigint(20) not null auto_increment comment '商品id',
+    user_id              bigint(20) comment '用户id',
+    dept_id              bigint(20) comment '部门id',
+    name                 varchar(150) comment '商品名称',
+    brand                varchar(20) comment '品牌',
+    model                varchar(50) comment '规格型号',
+    color                varchar(20) comment '颜色',
+    size                 varchar(20) comment '尺寸',
+    create_time       datetime                                   comment '创建时间',
+    update_by         varchar(50)     default ''                 comment '更新者',
+    update_time       datetime                                   comment '更新时间',
+    remark            varchar(255)    default null               comment '备注',
+    primary key (goods_id)
+) engine=innodb auto_increment=1 comment = '商品信息表';
+
+/*==============================================================*/
+/* Table: pro_rush_account                                      */
+/*==============================================================*/
+create table pro_rush_account
+(
+    account_id           bigint(20) not null auto_increment,
+    user_id              bigint(20),
+    dept_id              bigint(20),
+    capital              bigint(20) comment '本金',
+    income               double(10,3) comment '收入',
+    profit               double(10,3) comment '利润',
+    net_profit           double(10,3) comment '净利润',
+    create_time       datetime                                   comment '创建时间',
+    update_by         varchar(50)     default ''                 comment '更新者',
+    update_time       datetime                                   comment '更新时间',
+    remark            varchar(255)    default null               comment '备注',
+    primary key (account_id)
+) engine=innodb auto_increment=1 comment = '抢购资金账户';
+
+
+/*==============================================================*/
+/* Table: pro_rush_dealinfo                                     */
+/*==============================================================*/
+create table pro_rush_dealinfo
+(
+    deal_id              bigint(20) not null comment '交易id',
+    user_id              bigint(20) comment '用户id',
+    dept_id              bigint(20) comment '部门id',
+    goods_id             bigint(20) comment '交易商品',
+    deal_from            varchar(50) comment '卖方',
+    deal_to              varchar(50) comment '买方',
+    deal_num             varchar(8) comment '交易金额',
+    deal_type            varchar(5) comment '交易类型-buy：我为买方 sale：我为卖方',
+    handle_order_id      bigint(20),
+    deal_time            datetime comment '交易时间',
+    create_time       datetime                                   comment '创建时间',
+    update_by         varchar(50)     default ''                 comment '更新者',
+    update_time       datetime                                   comment '更新时间',
+    remark            varchar(255)    default null               comment '备注',
+    primary key (deal_id)
+) engine=innodb auto_increment=1 comment = '抢购交易信息';
+
+
+/*==============================================================*/
+/* Table: pro_rush_purchaseInfo                                 */
+/*==============================================================*/
+create table pro_rush_purchaseInfo
+(
+    purchase_id          bigint(20) not null auto_increment comment '主键',
+    user_id              bigint(20) comment '用户id',
+    dept_id              bigint(20) comment '部门id',
+    purch_name           varchar(20) comment '购买人姓名',
+    phone_num            varchar(11) comment '购买人手机号',
+    goods_id             bigint(20) comment '购买商品id',
+    buy_from             varchar(20) comment '购买渠道',
+    buy_price            varchar(10) comment '购买价格',
+    buy_time             datetime comment '下单时间',
+    order_num            varchar(30) comment '订单号-后六位',
+    machine_id            varchar(30) comment '机器唯一码（串码）',
+    order_state          varchar(10) comment '订单状态',
+    deal_state           varchar(6) comment '结算状态',
+    arrival_time             datetime comment '到货时间',
+    deal_price           varchar(10) comment '中间价',
+    deal_time            datetime comment '结算时间',
+    rush_state           varchar(3) comment '抢购流转状态 发货 到货 退货',
+    create_time       datetime                           comment '创建时间',
+    update_by         varchar(50)     default ''         comment '更新者',
+    update_time       datetime                           comment '更新时间',
+    remark            varchar(255)    default null       comment '备注',
+    primary key (purchase_id)
+) engine=innodb auto_increment=1 comment = '抢购人购买结算信息';
+
+/*==============================================================*/
+/* Table: pro_rush_rushsale                                     */
+/*==============================================================*/
+create table pro_rush_rushsale
+(
+    rushsale_id          bigint(20) not null auto_increment comment '收购商结算id',
+    user_id              bigint(20) comment '用户id',
+    dept_id              bigint(20) comment '部门id',
+    purchase_id          bigint(20) comment '抢购人购买id',
+    pay_price            varchar(10) comment '收购商结算价',
+    pay_time             datetime comment '收购商结算时间',
+    pay_from             varchar(50) comment '收购商',
+    pay_type             varchar(50) comment '结算方式',
+    deal_price           varchar(10) comment '中间价',
+    deal_state           varchar(6),
+    rush_state           varchar(20) comment '转送状态 转出 退回',
+    create_time       datetime                                   comment '创建时间',
+    update_by         varchar(50)     default ''                 comment '更新者',
+    update_time       datetime                                   comment '更新时间',
+    remark            varchar(255)    default null               comment '备注',
+    primary key (rushsale_id)
+) engine=innodb auto_increment=1 comment = '出售交易信息表';
+
+
+
+
