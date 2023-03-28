@@ -29,8 +29,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectProRushPurchaseinfoVo">
-        select purchase_id, user_id, dept_id, purch_name, phone_num, goods_id, buy_from, buy_price, buy_time, order_num, machine_id, order_state, deal_state, arrival_time, deal_price, deal_time, rush_state, create_time, update_by, update_time, remark from pro_rush_purchaseinfo
+        select purchase_id, pro_rush_purchaseinfo.user_id,
+               pro_rush_purchaseinfo.dept_id,
+               (select u.user_name from sys_user u where u.user_id=pro_rush_purchaseinfo.purch_name) as purch_name,
+               phone_num, pro_rush_purchaseinfo.goods_id,
+               good.name goodsName,good.brand as goodsBrand,good.model as goodsModel,good.color goodsColor,
+               buy_from, buy_price, buy_time, order_num, machine_id, order_state, deal_state,
+               arrival_time, deal_price, deal_time, rush_state,
+               pro_rush_purchaseinfo.create_time,
+               pro_rush_purchaseinfo.update_by,
+               pro_rush_purchaseinfo.update_time,
+               pro_rush_purchaseinfo.remark
+        from pro_rush_purchaseinfo
+                left join pro_rush_goods good on good.goods_id=pro_rush_purchaseinfo.goods_id
     </sql>
+
 
     <select id="selectProRushPurchaseinfoList" parameterType="ProRushPurchaseinfo" resultMap="ProRushPurchaseinfoResult">
         <include refid="selectProRushPurchaseinfoVo"/>

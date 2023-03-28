@@ -37,7 +37,15 @@ public class ProRushPurchaseinfo extends BaseEntity
     /** 购买商品id */
     @Excel(name = "购买商品id")
     private Long goodsId;
-
+    /** 购买商品 */
+    @Excel(name = "购买商品")
+    private String goodsName;
+    @Excel(name = "商品品牌")
+    private String goodsBrand;
+    @Excel(name = "商品型号")
+    private String goodsModel;
+    @Excel(name = "商品颜色")
+    private String goodsColor;
     /** 购买渠道 */
     @Excel(name = "购买渠道")
     private String buyFrom;
@@ -85,7 +93,41 @@ public class ProRushPurchaseinfo extends BaseEntity
     @Excel(name = "抢购流转状态 发货 到货 退货")
     private String rushState;
 
-    public void setPurchaseId(Long purchaseId) 
+    private String type;//修改类型
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getGoodsBrand() {
+        return goodsBrand;
+    }
+
+    public void setGoodsBrand(String goodsBrand) {
+        this.goodsBrand = goodsBrand;
+    }
+
+    public String getGoodsModel() {
+        return goodsModel;
+    }
+
+    public void setGoodsModel(String goodsModel) {
+        this.goodsModel = goodsModel;
+    }
+
+    public String getGoodsColor() {
+        return goodsColor;
+    }
+
+    public void setGoodsColor(String goodsColor) {
+        this.goodsColor = goodsColor;
+    }
+
+    public void setPurchaseId(Long purchaseId)
     {
         this.purchaseId = purchaseId;
     }
@@ -225,7 +267,15 @@ public class ProRushPurchaseinfo extends BaseEntity
         this.dealTime = dealTime;
     }
 
-    public Date getDealTime() 
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public Date getDealTime()
     {
         return dealTime;
     }

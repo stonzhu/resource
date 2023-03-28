@@ -9,6 +9,15 @@ export function listPurchaseinfo(query) {
   })
 }
 
+// 查询抢购人购买结算下拉列表信息
+export function listPurchase() {
+  return request({
+    url: '/rushsale/purchaseinfo/xiala',
+    method: 'get',
+  })
+}
+
+
 // 查询抢购人购买结算信息详细
 export function getPurchaseinfo(purchaseId) {
   return request({
@@ -28,6 +37,7 @@ export function addPurchaseinfo(data) {
 
 // 修改抢购人购买结算信息
 export function updatePurchaseinfo(data) {
+
   return request({
     url: '/rushsale/purchaseinfo',
     method: 'put',

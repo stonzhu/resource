@@ -98,7 +98,7 @@
       <el-table-column label="卖方" align="center" prop="dealFrom" />
       <el-table-column label="买方" align="center" prop="dealTo" />
       <el-table-column label="交易金额" align="center" prop="dealNum" />
-      <el-table-column label="交易类型-buy：我为买方 sale：我为卖方" align="center" prop="dealType">
+      <el-table-column label="交易类型" align="center" prop="dealType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.pro_rush_dealtype" :value="scope.row.dealType"/>
         </template>
@@ -129,7 +129,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -166,7 +166,7 @@
         <el-form-item label="交易金额" prop="dealNum">
           <el-input v-model="form.dealNum" placeholder="请输入交易金额" />
         </el-form-item>
-        <el-form-item label="交易类型-buy：我为买方 sale：我为卖方" prop="dealType">
+        <el-form-item label="交易类型" prop="dealType">
           <el-select v-model="form.dealType" placeholder="请选择交易类型-buy：我为买方 sale：我为卖方">
             <el-option
               v-for="dict in dict.type.pro_rush_dealtype"

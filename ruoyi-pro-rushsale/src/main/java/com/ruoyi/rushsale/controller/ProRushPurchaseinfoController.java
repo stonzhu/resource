@@ -2,6 +2,12 @@ package com.ruoyi.rushsale.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.rushsale.common.constant.Constants;
+import com.ruoyi.rushsale.domain.ProRushGoods;
+import com.ruoyi.rushsale.service.IProRushGoodsService;
+import com.ruoyi.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +39,11 @@ public class ProRushPurchaseinfoController extends BaseController
 {
     @Autowired
     private IProRushPurchaseinfoService proRushPurchaseinfoService;
+    @Autowired
+    private IProRushGoodsService proRushGoodsService;
 
+    @Autowired
+    private ISysUserService userService;
     /**
      * 查询抢购人购买结算信息列表
      */
@@ -88,7 +98,12 @@ public class ProRushPurchaseinfoController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody ProRushPurchaseinfo proRushPurchaseinfo)
     {
-        return toAjax(proRushPurchaseinfoService.updateProRushPurchaseinfo(proRushPurchaseinfo));
+        String type = proRushPurchaseinfo.getType();
+        if(Constants.PURCHASEINFO_UPDATE_other.equals(type)){
+            return toAjax(proRushPurchaseinfoService.updateProRushPurchaseinfo(proRushPurchaseinfo));
+        }else{
+            return toAjax(proRushPurchaseinfoService.updateProRushPurchaseinfo(proRushPurchaseinfo));
+        }
     }
 
     /**
@@ -101,4 +116,21 @@ public class ProRushPurchaseinfoController extends BaseController
     {
         return toAjax(proRushPurchaseinfoService.deleteProRushPurchaseinfoByPurchaseIds(purchaseIds));
     }
+
+    @PreAuthorize("@ss.hasPermi('rushsale:purchaseinfo:list')")
+    @GetMapping(value = "/xiala")
+    public AjaxResult xiala()
+    {
+        AjaxResult ajax = AjaxResult.success();
+        ProRushGoods proRushGoods = new ProRushGoods();
+        //TODO 可以存在此处添加部门id，用于过滤部门数据
+        List<ProRushGoods> list = proRushGoodsService.selectProRushGoodsList(proRushGoods);
+        SysUser sysUser = new SysUser();
+        //sysUser.setDeptId(getDeptId());
+        List<SysUser> userLisr = userService.selectUserList(sysUser);
+        ajax.put("goodsList",list);
+        ajax.put("purchNameList",userLisr);
+        return ajax;
+    }
+
 }

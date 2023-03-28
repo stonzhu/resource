@@ -47,7 +47,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="转送状态 转出 退回" prop="rushState">
+      <el-form-item label="转送状态" prop="rushState">
         <el-select v-model="queryParams.rushState" placeholder="请选择转送状态 转出 退回" clearable>
           <el-option
             v-for="dict in dict.type.pro_rush_orderstate"
@@ -135,7 +135,7 @@
           <dict-tag :options="dict.type.pro_rush_dealstate" :value="scope.row.dealState"/>
         </template>
       </el-table-column>
-      <el-table-column label="转送状态 转出 退回" align="center" prop="rushState">
+      <el-table-column label="转送状态" align="center" prop="rushState">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.pro_rush_orderstate" :value="scope.row.rushState"/>
         </template>
@@ -160,7 +160,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -168,6 +168,37 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+
+
+    <el-table v-loading="loading" :data="purchaseinfoList" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="主键" align="center" prop="purchaseId" v-if="false"/>
+      <el-table-column label="购买人姓名" align="center" prop="purchName"/>
+      <el-table-column label="购买人手机号" align="center" prop="phoneNum" />
+      <el-table-column label="商品名称" align="center" prop="goodsName"/>
+      <el-table-column label="商品品牌" align="center" prop="goodsBrand"/>
+      <el-table-column label="商品型号" align="center" prop="goodsModel"/>
+      <el-table-column label="商品颜色" align="center" prop="goodsColor"/>
+      <el-table-column label="购买渠道" align="center" prop="buyFrom" >
+      </el-table-column>
+      <el-table-column label="购买价格" align="center" prop="buyPrice" />
+      <el-table-column label="下单时间" align="center" prop="buyTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.buyTime, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="订单号-后六位" align="center" prop="orderNum" />
+      <el-table-column label="运单号" align="center" prop="remark" />
+      <el-table-column label="机器唯一码" align="center" prop="machineId" />
+      <el-table-column label="订单状态" align="center" prop="orderState" >
+      </el-table-column>
+      <el-table-column label="到货时间" align="center" prop="arrivalTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.arrivalTime, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="中间价" align="center" prop="dealPrice" />
+    </el-table>
 
     <!-- 添加或修改出售交易信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
