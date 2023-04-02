@@ -798,7 +798,7 @@ create table pro_rush_account
 /*==============================================================*/
 create table pro_rush_dealinfo
 (
-    deal_id              bigint(20) not null comment '交易id',
+    deal_id              bigint(20) not null auto_increment comment '交易id',
     user_id              bigint(20) comment '用户id',
     dept_id              bigint(20) comment '部门id',
     goods_id             bigint(20) comment '交易商品',
@@ -806,6 +806,7 @@ create table pro_rush_dealinfo
     deal_to              varchar(50) comment '买方',
     deal_num             varchar(8) comment '交易金额',
     deal_type            varchar(5) comment '交易类型-buy：我为买方 sale：我为卖方',
+    deal_status            varchar(2) comment '交易状态：1有效 0无效',
     handle_order_id      bigint(20),
     deal_time            datetime comment '交易时间',
     create_time       datetime                                   comment '创建时间',

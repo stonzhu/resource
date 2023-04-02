@@ -42,6 +42,8 @@ public interface ProRushRushsaleMapper
      * @return 结果
      */
     public int updateProRushRushsale(ProRushRushsale proRushRushsale);
+    public int updateProRushRushsaleByConditon(ProRushRushsale proRushRushsale);
+
 
     /**
      * 删除出售交易信息

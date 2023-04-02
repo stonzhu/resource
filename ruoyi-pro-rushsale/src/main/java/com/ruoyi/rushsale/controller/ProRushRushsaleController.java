@@ -2,6 +2,11 @@ package com.ruoyi.rushsale.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.rushsale.common.constant.Constants;
+import com.ruoyi.rushsale.domain.ProRushDealinfo;
+import com.ruoyi.rushsale.service.IProRushDealinfoService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +38,9 @@ public class ProRushRushsaleController extends BaseController
 {
     @Autowired
     private IProRushRushsaleService proRushRushsaleService;
+
+    @Autowired
+    private IProRushDealinfoService proRushDealinfoService;
 
     /**
      * 查询出售交易信息列表
@@ -88,8 +96,33 @@ public class ProRushRushsaleController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody ProRushRushsale proRushRushsale)
     {
+        String type = proRushRushsale.getType();
+        //修改结算状态，生成交易信息
+        if(Constants.UPDATE_DEALSTATE.equals(type)){
+            ProRushDealinfo proRushDealinfo = new ProRushDealinfo();
+            //proRushDealinfo.setGoodsId(proRushRushsale.getGoodsId());
+            proRushDealinfo.setDealFrom(proRushRushsale.getPayFrom());
+            proRushDealinfo.setDealTo(getUserId().toString());
+            proRushDealinfo.setDealNum(proRushRushsale.getDealPrice());
+            proRushDealinfo.setDealType(Constants.DEAL_TYPE_SALE);
+            if(Constants.DEAL_STATUS_COMPLETE.equals(proRushRushsale.getDealState())){
+                proRushDealinfo.setDealStatus(Constants.DEAL_STATUS_VALID);
+            }else{
+                proRushDealinfo.setDealStatus(Constants.DEAL_STATUS_INVALID);
+            }
+            proRushDealinfo.setDealTime(DateUtils.getNowDate());
+            proRushDealinfo.setHandleOrderId(proRushRushsale.getRushsaleId());
+            if(proRushDealinfoService.updateProRushDealinfoByCondition(proRushDealinfo)<1){//修改交易单状态
+                proRushDealinfoService.insertProRushDealinfo(proRushDealinfo);
+            }
+
+        }
+
         return toAjax(proRushRushsaleService.updateProRushRushsale(proRushRushsale));
     }
+
+
+
 
     /**
      * 删除出售交易信息

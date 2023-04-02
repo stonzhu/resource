@@ -96,12 +96,37 @@
     <el-table v-loading="loading" :data="goodsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="商品id" align="center" prop="goodsId" />
-      <el-table-column label="商品名称" align="center" prop="name" />
-      <el-table-column label="品牌" align="center" prop="brand" />
-      <el-table-column label="规格型号" align="center" prop="model" />
-      <el-table-column label="颜色" align="center" prop="color" />
-      <el-table-column label="尺寸" align="center" prop="size" />
-      <el-table-column label="备注" align="center" prop="remark" />
+      <el-table-column label="商品名称" align="center" prop="name">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.name" @change="updateRow(scope.row,'')"/>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="品牌" align="center" prop="brand">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.brand" @change="updateRow(scope.row,'')"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="规格型号" align="center" prop="model">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.model" @change="updateRow(scope.row,'')"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="颜色" align="center" prop="color">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.color" @change="updateRow(scope.row,'')"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="尺寸" align="center" prop="size">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.size" @change="updateRow(scope.row,'')"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="备注" align="center" prop="remark">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.remark" @change="updateRow(scope.row,'')"/>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -121,7 +146,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -168,6 +193,7 @@
 
 <script>
 import { listGoods, getGoods, delGoods, addGoods, updateGoods } from "@/api/rushsale/goods";
+import {updatePurchaseinfo} from "@/api/rushsale/purchaseinfo";
 
 export default {
   name: "Goods",
@@ -248,6 +274,14 @@ export default {
     handleQuery() {
       this.queryParams.pageNum = 1;
       this.getList();
+    },
+    /** 修改行信息 */
+    updateRow(row,type){
+      row.type = type;
+      updateGoods(row).then(response => {
+        //this.$modal.msgSuccess("修改成功");
+        this.getList();
+      });
     },
     /** 重置按钮操作 */
     resetQuery() {

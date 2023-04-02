@@ -69,7 +69,12 @@ public class ProRushDealinfoServiceImpl implements IProRushDealinfoService
         proRushDealinfo.setUpdateTime(DateUtils.getNowDate());
         return proRushDealinfoMapper.updateProRushDealinfo(proRushDealinfo);
     }
-
+    @Override
+    public int updateProRushDealinfoByCondition(ProRushDealinfo proRushDealinfo)
+    {
+        proRushDealinfo.setUpdateTime(DateUtils.getNowDate());
+        return proRushDealinfoMapper.updateProRushDealinfoByCondition(proRushDealinfo);
+    }
     /**
      * 批量删除抢购交易信息
      * 

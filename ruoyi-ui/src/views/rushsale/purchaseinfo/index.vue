@@ -35,10 +35,10 @@
           placeholder="请选择下单时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="订单号" prop="orderNum">
+      <el-form-item label="收货人" prop="orderNum">
         <el-input
           v-model="queryParams.orderNum"
-          placeholder="请输入订单号-后六位"
+          placeholder="请选择收货人"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -146,12 +146,23 @@
           v-hasPermi="['rushsale:purchaseinfo:export']"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          @click="cheoceSellOut"
+          v-hasPermi="['rushsale:purchaseinfo:sellout']"
+        >选择收货人</el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="purchaseinfoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主键" align="center" prop="purchaseId" v-if="false"/>
+      <el-table-column label="购买人姓名id" align="center" prop="purchNameId" v-if="false"/>
       <el-table-column label="购买人姓名" align="center" prop="purchName"/>
       <el-table-column label="购买人手机号" align="center" prop="phoneNum" />
       <el-table-column label="商品名称" align="center" prop="goodsName"/>
@@ -172,15 +183,46 @@
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="购买价格" align="center" prop="buyPrice" />
-      <el-table-column label="下单时间" align="center" prop="buyTime" width="180">
+      <el-table-column label="购买价格" align="center" prop="buyPrice">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.buyTime, '{y}-{m}-{d}') }}</span>
+          <el-input v-model="scope.row.buyPrice" @change="updateRow(scope.row,'buyFrom')"/>
         </template>
       </el-table-column>
-      <el-table-column label="订单号-后六位" align="center" prop="orderNum" />
-      <el-table-column label="运单号" align="center" prop="remark" />
-      <el-table-column label="机器唯一码" align="center" prop="machineId" />
+
+      <el-table-column label="下单时间" align="center" prop="buyTime" width="180">
+        <template slot-scope="scope">
+          <el-date-picker clearable
+                          v-model="scope.row.buyTime"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          @change="updateRow(scope.row,'buyTime')">
+          </el-date-picker>
+        </template>
+      </el-table-column>
+      <el-table-column label="收货人" align="center" prop="orderNum" cell-style="1000px">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.orderNum" @change="updateRow(scope.row,'orderNum')">
+            <el-option
+              v-for="buyPeo in buyNameList"
+              :key="buyPeo.userId"
+              :label="buyPeo.userName"
+              :value="buyPeo.userId"
+            ></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="运单号" align="center" prop="remark">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.remark" @change="updateRow(scope.row,'remark')"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="机器唯一码" align="center" prop="machineId">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.machineId" @change="updateRow(scope.row,'machineId')"/>
+        </template>
+
+      </el-table-column>
       <el-table-column label="订单状态" align="center" prop="orderState" >
         <template slot-scope="scope">
           <el-select v-model="scope.row.orderState" @change="updateRow(scope.row,'orderState')" >
@@ -207,13 +249,27 @@
       </el-table-column>
       <el-table-column label="到货时间" align="center" prop="arrivalTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.arrivalTime, '{y}-{m}-{d}') }}</span>
+          <el-date-picker clearable
+                          v-model="scope.row.arrivalTime"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          @change="updateRow(scope.row,'arrivalTime')">
+          </el-date-picker>
         </template>
       </el-table-column>
-      <el-table-column label="中间价" align="center" prop="dealPrice" />
+      <el-table-column label="结算价" align="center" prop="dealPrice">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.dealPrice" @change="updateRow(scope.row,'dealPrice')"/>
+        </template>
+      </el-table-column>
       <el-table-column label="结算时间" align="center" prop="dealTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.dealTime, '{y}-{m}-{d}') }}</span>
+          <el-date-picker clearable
+                          v-model="scope.row.arrivalTime"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          @change="updateRow(scope.row,'dealTime')">
+          </el-date-picker>
         </template>
       </el-table-column>
       <el-table-column label="抢购流转状态" align="center" prop="rushState">
@@ -314,8 +370,15 @@
         <el-form-item label="运单号" prop="remark">
           <el-input v-model="form.remark" placeholder="请输入运单号" />
         </el-form-item>
-        <el-form-item label="订单号-后六位" prop="orderNum">
-          <el-input v-model="form.orderNum" placeholder="请输入订单号-后六位" />
+        <el-form-item label="收货人" prop="orderNum">
+          <el-select v-model="form.orderNum" placeholder="请选择收货人">
+            <el-option
+              v-for="buyPeo in buyNameList"
+              :key="buyPeo.userId"
+              :label="buyPeo.userName"
+              :value="buyPeo.userId"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="机器唯一码" prop="machineId">
           <el-input v-model="form.machineId" placeholder="请输入机器唯一码" />
@@ -348,8 +411,8 @@
             placeholder="请选择到货时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="中间价" prop="dealPrice">
-          <el-input v-model="form.dealPrice" placeholder="请输入中间价" />
+        <el-form-item label="结算价" prop="dealPrice">
+          <el-input v-model="form.dealPrice" placeholder="请输入结算价" />
         </el-form-item>
         <el-form-item label="结算时间" prop="dealTime">
           <el-date-picker clearable
@@ -371,6 +434,15 @@
         </el-form-item>
 
       </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 选择收货人对话框 -->
+    <el-dialog :title="titleB" :visible.sync="openB" width="500px" append-to-body>
+
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
@@ -407,12 +479,16 @@ export default {
       goodsList: [],
       //购买人下拉列表
       purchNameList: [],
+      //收货人下拉列表
+      buyNameList: [],
       //商品数据map
       goodsMap: [],
       // 弹出层标题
       title: "",
+      titleB: "",
       // 是否显示弹出层
       open: false,
+      openB: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -432,16 +508,17 @@ export default {
       },
       // 表单参数
       form: {},
+      formB: {},
       // 表单校验
       rules: {
         remark: [
           { required: true, message: "运单号不能为空", trigger: "blur" }
         ]
-
       }
     };
   },
   created() {
+    this.getXialaList();
     this.getList();
   },
   methods: {
@@ -452,6 +529,19 @@ export default {
         this.purchaseinfoList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    //获取列表数据
+    getXialaList(){
+      listPurchase().then(response => {
+        //过滤用户
+        var index;
+        for(index in response.buyNameList){
+          this.buyNameList.push({"userId":response.buyNameList[index].userId+'',
+            "userName":response.buyNameList[index].userName});
+          this.purchNameList.push({"userId":response.buyNameList[index].userId+'',
+            "userName":response.buyNameList[index].userName})
+        }
       });
     },
     // 取消按钮
@@ -507,7 +597,8 @@ export default {
       this.reset();
       listPurchase().then(response => {
           this.goodsList = response.goodsList;
-          this.purchNameList = response.purchNameList;
+          //this.purchNameList = response.purchNameList;
+          //this.buyNameList = response.buyNameList;
           this.open = true;
           this.title = "添加抢购人购买信息";
         });
@@ -522,6 +613,17 @@ export default {
         this.title = "修改抢购人购买结算信息";
       });
     },
+    /** 选择收货人按钮操作 */
+    cheoceSellOut(row) {
+      this.reset();
+      const purchaseId = row.purchaseId || this.ids
+      cheoceSellOut(purchaseId).then(response => {
+        this.form = response.data;
+        this.open = true;
+        this.title = "修改抢购人购买结算信息";
+      });
+    },
+
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -558,15 +660,14 @@ export default {
         ...this.queryParams
       }, `purchaseinfo_${new Date().getTime()}.xlsx`)
     },
-    /** 修改行buyFrom信息 */
+    /** 修改行信息 */
     updateRow(row,type){
       row.type = type;
-      row.purchName =null;
+      row.purchName =row.purchNameId;
       updatePurchaseinfo(row).then(response => {
         //this.$modal.msgSuccess("修改成功");
         this.getList();
       });
-
     },
     updateRowConfirm(row,type) {
       this.$confirm('是否继续修改?', '提示', {
@@ -575,7 +676,15 @@ export default {
         type: 'warning'
       }).then(() => {
         row.type = type;
-        row.purchName =null;
+        row.purchName =row.purchNameId;
+        //校验数据，结算价不能为空
+        if(!row.dealPrice){
+          this.$message({
+            type: 'info',
+            message: '结算价不能为空'
+          });
+          return;
+        }
         updatePurchaseinfo(row).then(response => {
           //this.$modal.msgSuccess("修改成功");
           this.getList();

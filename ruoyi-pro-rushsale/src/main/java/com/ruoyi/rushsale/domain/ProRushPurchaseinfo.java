@@ -29,6 +29,8 @@ public class ProRushPurchaseinfo extends BaseEntity
     /** 购买人姓名 */
     @Excel(name = "购买人姓名")
     private String purchName;
+    private String purchNameId;
+
 
     /** 购买人手机号 */
     @Excel(name = "购买人手机号")
@@ -93,7 +95,15 @@ public class ProRushPurchaseinfo extends BaseEntity
     @Excel(name = "抢购流转状态 发货 到货 退货")
     private String rushState;
 
-    private String type;//修改类型
+    private String type;//修改类型列名
+
+    public String getPurchNameId() {
+        return purchNameId;
+    }
+
+    public void setPurchNameId(String purchNameId) {
+        this.purchNameId = purchNameId;
+    }
 
     public String getType() {
         return type;

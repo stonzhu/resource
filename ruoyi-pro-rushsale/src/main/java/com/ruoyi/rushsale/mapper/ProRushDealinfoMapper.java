@@ -42,6 +42,7 @@ public interface ProRushDealinfoMapper
      * @return 结果
      */
     public int updateProRushDealinfo(ProRushDealinfo proRushDealinfo);
+    public int updateProRushDealinfoByCondition(ProRushDealinfo proRushDealinfo);
 
     /**
      * 删除抢购交易信息

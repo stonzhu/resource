@@ -15,6 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="dealType"    column="deal_type"    />
         <result property="handleOrderId"    column="handle_order_id"    />
         <result property="dealTime"    column="deal_time"    />
+        <result property="dealStatus"    column="deal_status"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
@@ -22,17 +23,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectProRushDealinfoVo">
-        select deal_id, user_id, dept_id, goods_id, deal_from, deal_to, deal_num, deal_type, handle_order_id, deal_time, create_time, update_by, update_time, remark from pro_rush_dealinfo
+        select deal_id, user_id, dept_id,
+               pro_rush_dealinfo.goods_id,
+        (select CONCAT(g.`name`,g.brand,g.model,g.color) from pro_rush_goods g where g.goods_id=pro_rush_dealinfo.goods_id) as goodsName,
+               (select u.user_name from sys_user u where u.user_id=pro_rush_dealinfo.deal_from) as deal_from,
+               (select u.user_name from sys_user u where u.user_id=pro_rush_dealinfo.deal_to) as deal_to,
+               deal_num, deal_type, handle_order_id, deal_time,deal_status, create_time, update_by, update_time, remark
+        from pro_rush_dealinfo
     </sql>
 
     <select id="selectProRushDealinfoList" parameterType="ProRushDealinfo" resultMap="ProRushDealinfoResult">
         <include refid="selectProRushDealinfoVo"/>
-        <where>  
+        <where>
             <if test="goodsId != null "> and goods_id = #{goodsId}</if>
             <if test="dealFrom != null  and dealFrom != ''"> and deal_from = #{dealFrom}</if>
             <if test="dealTo != null  and dealTo != ''"> and deal_to = #{dealTo}</if>
             <if test="handleOrderId != null "> and handle_order_id = #{handleOrderId}</if>
             <if test="dealTime != null "> and deal_time &lt;= #{dealTime}</if>
+            <if test="dealStatus != null "> and deal_status = #{dealStatus}</if>
         </where>
     </select>
     
@@ -54,6 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dealType != null">deal_type,</if>
             <if test="handleOrderId != null">handle_order_id,</if>
             <if test="dealTime != null">deal_time,</if>
+            <if test="dealStatus != null">deal_status,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
@@ -70,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dealType != null">#{dealType},</if>
             <if test="handleOrderId != null">#{handleOrderId},</if>
             <if test="dealTime != null">#{dealTime},</if>
+            <if test="dealStatus != null">#{dealStatus},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
@@ -87,8 +97,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dealTo != null">deal_to = #{dealTo},</if>
             <if test="dealNum != null">deal_num = #{dealNum},</if>
             <if test="dealType != null">deal_type = #{dealType},</if>
-            <if test="handleOrderId != null">handle_order_id = #{handleOrderId},</if>
             <if test="dealTime != null">deal_time = #{dealTime},</if>
+            <if test="dealStatus != null">deal_status=#{dealStatus},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
@@ -96,6 +106,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where deal_id = #{dealId}
     </update>
+
+    <update id="updateProRushDealinfoByCondition" parameterType="ProRushDealinfo">
+        update pro_rush_dealinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="dealFrom != null">deal_from = #{dealFrom},</if>
+            <if test="dealTo != null">deal_to = #{dealTo},</if>
+            <if test="dealNum != null">deal_num = #{dealNum},</if>
+            <if test="dealType != null">deal_type = #{dealType},</if>
+            <if test="dealTime != null">deal_time = #{dealTime},</if>
+            <if test="dealStatus != null">deal_status=#{dealStatus},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where handle_order_id = #{handleOrderId}
+    </update>
+
 
     <delete id="deleteProRushDealinfoByDealId" parameterType="Long">
         delete from pro_rush_dealinfo where deal_id = #{dealId}

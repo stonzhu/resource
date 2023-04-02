@@ -25,6 +25,7 @@ public class ProRushRushsale extends BaseEntity
 
     /** 部门id */
     private Long deptId;
+    private String type;//修改类型列名
 
     /** 抢购人购买id */
     @Excel(name = "抢购人购买id")
@@ -59,7 +60,15 @@ public class ProRushRushsale extends BaseEntity
     @Excel(name = "转送状态 转出 退回")
     private String rushState;
 
-    public void setRushsaleId(Long rushsaleId) 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setRushsaleId(Long rushsaleId)
     {
         this.rushsaleId = rushsaleId;
     }

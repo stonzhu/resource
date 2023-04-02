@@ -69,7 +69,12 @@ public class ProRushRushsaleServiceImpl implements IProRushRushsaleService
         proRushRushsale.setUpdateTime(DateUtils.getNowDate());
         return proRushRushsaleMapper.updateProRushRushsale(proRushRushsale);
     }
-
+    @Override
+    public int updateProRushRushsaleByConditon(ProRushRushsale proRushRushsale)
+    {
+        proRushRushsale.setUpdateTime(DateUtils.getNowDate());
+        return proRushRushsaleMapper.updateProRushRushsaleByConditon(proRushRushsale);
+    }
     /**
      * 批量删除出售交易信息
      * 

@@ -42,6 +42,7 @@ public interface IProRushRushsaleService
      * @return 结果
      */
     public int updateProRushRushsale(ProRushRushsale proRushRushsale);
+    public int updateProRushRushsaleByConditon(ProRushRushsale proRushRushsale);
 
     /**
      * 批量删除出售交易信息

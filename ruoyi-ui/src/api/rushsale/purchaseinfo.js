@@ -8,8 +8,17 @@ export function listPurchaseinfo(query) {
     params: query
   })
 }
+//查询还未绑定收货人的抢购单
+export function listPurchaseinfoByStatus(query) {
+  return request({
+    url: '/rushsale/purchaseinfo/listNotPreSell',
+    method: 'get',
+    params: query
+  })
+}
 
-// 查询抢购人购买结算下拉列表信息
+
+// 查询抢购人购买结算下拉列表信息,商品列表和购买人列表
 export function listPurchase() {
   return request({
     url: '/rushsale/purchaseinfo/xiala',

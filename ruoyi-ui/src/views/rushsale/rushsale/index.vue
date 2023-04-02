@@ -111,33 +111,79 @@
 
     <el-table v-loading="loading" :data="rushsaleList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="收购商结算id" align="center" prop="rushsaleId" />
-      <el-table-column label="抢购人购买id" align="center" prop="purchaseId">
-        <template slot-scope="scope">
+      <el-table-column label="收购商结算id" align="center" prop="rushsaleId" v-if="false"/>
+      <el-table-column label="抢购人购买id" align="center" prop="purchaseId" >
+<!--        <template slot-scope="scope">
           <dict-tag :options="dict.type.pro_rushsale_buyfrom" :value="scope.row.purchaseId"/>
+        </template>-->
+      </el-table-column>
+      <el-table-column label="收购商结算价" align="center" prop="payPrice">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.payPrice" @change="updateRow(scope.row,'')"/>
         </template>
       </el-table-column>
-      <el-table-column label="收购商结算价" align="center" prop="payPrice" />
       <el-table-column label="收购商结算时间" align="center" prop="payTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.payTime, '{y}-{m}-{d}') }}</span>
+          <el-date-picker clearable
+                          v-model="scope.row.payTime"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          @change="updateRow(scope.row,'')">
+          </el-date-picker>
         </template>
       </el-table-column>
-      <el-table-column label="收购商" align="center" prop="payFrom" />
+      <el-table-column label="收购商" align="center" prop="payFrom">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.payFrom" @change="updateRow(scope.row,'payFrom')">
+            <el-option
+              v-for="buyPeo in buyNameList"
+              :key="buyPeo.userId"
+              :label="buyPeo.userName"
+              :value="buyPeo.userId"
+            ></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+
       <el-table-column label="结算方式" align="center" prop="payType">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.pro_rushsale_balance" :value="scope.row.payType"/>
+          <el-select v-model="form.payType" @change="updateRow(scope.row,'')">
+            <el-option
+              v-for="dict in dict.type.pro_rushsale_balance"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="中间价" align="center" prop="dealPrice" />
+      <el-table-column label="中间价" align="center" prop="dealPrice">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.dealPrice" @change="updateRow(scope.row,'')"/>
+        </template>
+      </el-table-column>
       <el-table-column label="结算状态" align="center" prop="dealState">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.pro_rush_dealstate" :value="scope.row.dealState"/>
+          <el-select v-model="form.dealState" @change="updateRowConfirm(scope.row,'dealState')">
+            <el-option
+              v-for="dict in dict.type.pro_rush_dealstate"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </template>
       </el-table-column>
       <el-table-column label="转送状态" align="center" prop="rushState">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.pro_rush_orderstate" :value="scope.row.rushState"/>
+          <el-select v-model="form.rushState" @change="updateRow(scope.row,'')">
+            <el-option
+              v-for="dict in dict.type.pro_rush_orderstate"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
@@ -160,7 +206,6 @@
         </template>
       </el-table-column>
     </el-table>
-
     <pagination
       v-show="total>0"
       :total="total"
@@ -168,38 +213,6 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
-
-    <el-table v-loading="loading" :data="purchaseinfoList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="purchaseId" v-if="false"/>
-      <el-table-column label="购买人姓名" align="center" prop="purchName"/>
-      <el-table-column label="购买人手机号" align="center" prop="phoneNum" />
-      <el-table-column label="商品名称" align="center" prop="goodsName"/>
-      <el-table-column label="商品品牌" align="center" prop="goodsBrand"/>
-      <el-table-column label="商品型号" align="center" prop="goodsModel"/>
-      <el-table-column label="商品颜色" align="center" prop="goodsColor"/>
-      <el-table-column label="购买渠道" align="center" prop="buyFrom" >
-      </el-table-column>
-      <el-table-column label="购买价格" align="center" prop="buyPrice" />
-      <el-table-column label="下单时间" align="center" prop="buyTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.buyTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="订单号-后六位" align="center" prop="orderNum" />
-      <el-table-column label="运单号" align="center" prop="remark" />
-      <el-table-column label="机器唯一码" align="center" prop="machineId" />
-      <el-table-column label="订单状态" align="center" prop="orderState" >
-      </el-table-column>
-      <el-table-column label="到货时间" align="center" prop="arrivalTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.arrivalTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="中间价" align="center" prop="dealPrice" />
-    </el-table>
-
     <!-- 添加或修改出售交易信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -209,20 +222,20 @@
         <el-form-item label="部门id" prop="deptId">
           <el-input v-model="form.deptId" placeholder="请输入部门id" />
         </el-form-item>
-        <el-form-item label="抢购人购买id" prop="purchaseId">
-          <el-select v-model="form.purchaseId" placeholder="请选择抢购人购买id">
+        <el-form-item label="抢购人购买" prop="purchaseId">
+          <el-select v-model="form.purchaseId" placeholder="请选择抢购人购买">
             <el-option
-              v-for="dict in dict.type.pro_rushsale_buyfrom"
+              v-for="dict in purchaseinfoList"
               :key="dict.value"
               :label="dict.label"
               :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="收购商结算价" prop="payPrice">
+        <el-form-item label="结算价" prop="payPrice">
           <el-input v-model="form.payPrice" placeholder="请输入收购商结算价" />
         </el-form-item>
-        <el-form-item label="收购商结算时间" prop="payTime">
+        <el-form-item label="结算时间" prop="payTime">
           <el-date-picker clearable
             v-model="form.payTime"
             type="date"
@@ -230,9 +243,15 @@
             placeholder="请选择收购商结算时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="收购商" prop="payFrom">
-          <el-input v-model="form.payFrom" placeholder="请输入收购商" />
-        </el-form-item>
+        <el-form-item label="收购商" prop="payFrom"/>
+          <el-select v-model="form.payFrom">
+            <el-option
+              v-for="buyPeo in buyNameList"
+              :key="buyPeo.userId"
+              :label="buyPeo.userName"
+              :value="buyPeo.userId"
+            ></el-option>
+          </el-select>
         <el-form-item label="结算方式" prop="payType">
           <el-select v-model="form.payType" placeholder="请选择结算方式">
             <el-option
@@ -280,6 +299,7 @@
 
 <script>
 import { listRushsale, getRushsale, delRushsale, addRushsale, updateRushsale } from "@/api/rushsale/rushsale";
+import {listPurchase, listPurchaseinfo, updatePurchaseinfo} from "@/api/rushsale/purchaseinfo";
 
 export default {
   name: "Rushsale",
@@ -300,6 +320,9 @@ export default {
       total: 0,
       // 出售交易信息表格数据
       rushsaleList: [],
+      //抢购交易信息
+      purchaseinfoList: [],
+      buyNameList:[],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -324,6 +347,7 @@ export default {
   },
   created() {
     this.getList();
+    this.getXialaList();
   },
   methods: {
     /** 查询出售交易信息列表 */
@@ -333,6 +357,17 @@ export default {
         this.rushsaleList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    //获取列表数据
+    getXialaList(){
+      listPurchase().then(response => {
+        //过滤用户
+        var index;
+        for(index in response.buyNameList){
+          this.buyNameList.push({"userId":response.buyNameList[index].userId+'',
+            "userName":response.buyNameList[index].userName});
+        }
       });
     },
     // 取消按钮
@@ -391,6 +426,36 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改出售交易信息";
+      });
+    },
+    /** 修改行信息 */
+    updateRow(row,type){
+      row.type = type;
+      //row.purchName =null;
+      updateRushsale(row).then(response => {
+        this.getList();
+      });
+    },
+    updateRowConfirm(row,type) {
+      this.$confirm('是否继续修改?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.type = type;
+        //数据校验，结算价不能为空
+        updateRushsale(row).then(response => {
+          this.getList();
+        });
+        this.$message({
+          type: 'success',
+          message: '修改成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消修改'
+        });
       });
     },
     /** 提交按钮 */

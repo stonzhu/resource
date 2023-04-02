@@ -89,12 +89,10 @@
 
     <el-table v-loading="loading" :data="dealinfoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="交易id" align="center" prop="dealId" />
-      <el-table-column label="交易商品" align="center" prop="goodsId">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.pro_rushsale_buyfrom" :value="scope.row.goodsId"/>
-        </template>
-      </el-table-column>
+      <el-table-column label="交易id" align="center" prop="dealId" v-if="false" />
+      <el-table-column label="交易商品" align="center" prop="goodsId" v-if="false"/>
+      <el-table-column label="交易商品" align="center" prop="goodsName"/>
+
       <el-table-column label="卖方" align="center" prop="dealFrom" />
       <el-table-column label="买方" align="center" prop="dealTo" />
       <el-table-column label="交易金额" align="center" prop="dealNum" />
@@ -103,7 +101,7 @@
           <dict-tag :options="dict.type.pro_rush_dealtype" :value="scope.row.dealType"/>
         </template>
       </el-table-column>
-      <el-table-column label="交易来源" align="center" prop="handleOrderId" />
+      <el-table-column label="交易来源" align="center" prop="handleOrderId" v-if="false"/>
       <el-table-column label="交易时间" align="center" prop="dealTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.dealTime, '{y}-{m}-{d}') }}</span>
@@ -126,6 +124,13 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['rushsale:dealinfo:remove']"
           >删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-detail"
+            @click="handleDetail(scope.row.handleOrderId,scope.row.dealType)"
+            v-hasPermi="['rushsale:dealinfo:detail']"
+          >详情</el-button>
         </template>
       </el-table-column>
     </el-table>

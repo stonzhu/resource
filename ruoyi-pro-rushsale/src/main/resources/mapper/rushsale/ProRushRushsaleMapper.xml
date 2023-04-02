@@ -84,7 +84,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="userId != null">user_id = #{userId},</if>
             <if test="deptId != null">dept_id = #{deptId},</if>
-            <if test="purchaseId != null">purchase_id = #{purchaseId},</if>
             <if test="payPrice != null">pay_price = #{payPrice},</if>
             <if test="payTime != null">pay_time = #{payTime},</if>
             <if test="payFrom != null">pay_from = #{payFrom},</if>
@@ -99,6 +98,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where rushsale_id = #{rushsaleId}
     </update>
+    <update id="updateProRushRushsaleByConditon" parameterType="ProRushRushsale">
+        update pro_rush_rushsale
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="payPrice != null">pay_price = #{payPrice},</if>
+            <if test="payTime != null">pay_time = #{payTime},</if>
+            <if test="payFrom != null">pay_from = #{payFrom},</if>
+            <if test="payType != null">pay_type = #{payType},</if>
+            <if test="dealPrice != null">deal_price = #{dealPrice},</if>
+            <if test="dealState != null">deal_state = #{dealState},</if>
+            <if test="rushState != null">rush_state = #{rushState},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where purchase_id = #{purchaseId}
+
+    </update>
 
     <delete id="deleteProRushRushsaleByRushsaleId" parameterType="Long">
         delete from pro_rush_rushsale where rushsale_id = #{rushsaleId}
@@ -110,4 +129,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{rushsaleId}
         </foreach>
     </delete>
+
 </mapper>

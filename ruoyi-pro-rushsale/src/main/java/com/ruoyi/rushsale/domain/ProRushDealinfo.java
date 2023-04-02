@@ -27,8 +27,10 @@ public class ProRushDealinfo extends BaseEntity
     private Long deptId;
 
     /** 交易商品 */
-    @Excel(name = "交易商品")
+
     private Long goodsId;
+    @Excel(name = "交易商品")
+    private String goodsName;
 
     /** 卖方 */
     @Excel(name = "卖方")
@@ -49,13 +51,33 @@ public class ProRushDealinfo extends BaseEntity
     /** 交易来源 */
     @Excel(name = "交易来源")
     private Long handleOrderId;
+    /** 交易状态 */
+    @Excel(name = "交易状态")
+    private String dealStatus;
+
 
     /** 交易时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "交易时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date dealTime;
 
-    public void setDealId(Long dealId) 
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public String getDealStatus() {
+        return dealStatus;
+    }
+
+    public void setDealStatus(String dealStatus) {
+        this.dealStatus = dealStatus;
+    }
+
+    public void setDealId(Long dealId)
     {
         this.dealId = dealId;
     }
