@@ -54,6 +54,13 @@ export function updatePurchaseinfo(data) {
   })
 }
 
+export function handleCopy(purchaseId){
+  return request({
+    url: '/rushsale/purchaseinfo/handleCopy/'+purchaseId,
+    method: 'get'
+  })
+}
+
 // 删除抢购人购买结算信息
 export function delPurchaseinfo(purchaseId) {
   return request({

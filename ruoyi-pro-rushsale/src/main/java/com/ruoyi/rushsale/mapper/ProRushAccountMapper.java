@@ -7,7 +7,7 @@ import com.ruoyi.rushsale.domain.ProRushAccount;
  * 抢购资金账户Mapper接口
  * 
  * @author ruoyi
- * @date 2023-03-24
+ * @date 2023-04-03
  */
 public interface ProRushAccountMapper 
 {
@@ -18,6 +18,7 @@ public interface ProRushAccountMapper
      * @return 抢购资金账户
      */
     public ProRushAccount selectProRushAccountByAccountId(Long accountId);
+    public ProRushAccount selectProRushAccountByAccountNum(String accountNum);
 
     /**
      * 查询抢购资金账户列表

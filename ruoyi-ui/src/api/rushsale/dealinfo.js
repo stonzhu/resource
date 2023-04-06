@@ -9,6 +9,8 @@ export function listDealinfo(query) {
   })
 }
 
+
+
 // 查询抢购交易信息详细
 export function getDealinfo(dealId) {
   return request({
@@ -34,6 +36,8 @@ export function updateDealinfo(data) {
     data: data
   })
 }
+
+
 
 // 删除抢购交易信息
 export function delDealinfo(dealId) {

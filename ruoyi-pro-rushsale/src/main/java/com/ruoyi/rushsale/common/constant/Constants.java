@@ -8,7 +8,9 @@ public class Constants {
     public static String PURCHASEINFO_UPDATE_ORDERNUM = "orderNum";//选择收货人状态
     public static String PURCHASEINFO_UPDATE_other = "other";//其他状态
 
-    //-----------------
+    //-----------------交易账户列
+    public static String UPDATE_ACCOUNTNUM= "accountNum";//交易账户修改
+    public static String UPDATE_DEALCANCEL= "dealcancel";//交易取消
 
  //-------------------------订单状态 ----------------------------
     public static String ORDERSTATUS_SEND = "send";//发出

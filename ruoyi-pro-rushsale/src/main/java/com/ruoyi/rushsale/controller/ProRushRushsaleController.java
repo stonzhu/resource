@@ -100,10 +100,10 @@ public class ProRushRushsaleController extends BaseController
         //修改结算状态，生成交易信息
         if(Constants.UPDATE_DEALSTATE.equals(type)){
             ProRushDealinfo proRushDealinfo = new ProRushDealinfo();
-            //proRushDealinfo.setGoodsId(proRushRushsale.getGoodsId());
+            proRushDealinfo.setGoodsId(proRushRushsale.getGoodsId());
             proRushDealinfo.setDealFrom(proRushRushsale.getPayFrom());
             proRushDealinfo.setDealTo(getUserId().toString());
-            proRushDealinfo.setDealNum(proRushRushsale.getDealPrice());
+            proRushDealinfo.setDealNum(proRushRushsale.getPayPrice());
             proRushDealinfo.setDealType(Constants.DEAL_TYPE_SALE);
             if(Constants.DEAL_STATUS_COMPLETE.equals(proRushRushsale.getDealState())){
                 proRushDealinfo.setDealStatus(Constants.DEAL_STATUS_VALID);

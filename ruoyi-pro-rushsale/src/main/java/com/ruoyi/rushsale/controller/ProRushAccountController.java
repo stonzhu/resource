@@ -2,6 +2,9 @@ package com.ruoyi.rushsale.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.rushsale.domain.ProRushAccount;
+import com.ruoyi.rushsale.service.IProRushAccountService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +19,6 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.rushsale.domain.ProRushAccount;
-import com.ruoyi.rushsale.service.IProRushAccountService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
@@ -25,7 +26,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 抢购资金账户Controller
  * 
  * @author ruoyi
- * @date 2023-03-24
+ * @date 2023-04-03
  */
 @RestController
 @RequestMapping("/rushsale/account")
@@ -44,6 +45,16 @@ public class ProRushAccountController extends BaseController
         startPage();
         List<ProRushAccount> list = proRushAccountService.selectProRushAccountList(proRushAccount);
         return getDataTable(list);
+    }
+
+    @GetMapping(value = "/xiala")
+    public AjaxResult xiala()
+    {
+        AjaxResult ajax = AjaxResult.success();
+        ProRushAccount proRushAccount = new ProRushAccount();
+        List<ProRushAccount> accountList = proRushAccountService.selectProRushAccountList(proRushAccount);
+        ajax.put("accountList",accountList);
+        return ajax;
     }
 
     /**

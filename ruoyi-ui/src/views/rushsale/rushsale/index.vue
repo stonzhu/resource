@@ -112,11 +112,10 @@
     <el-table v-loading="loading" :data="rushsaleList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="收购商结算id" align="center" prop="rushsaleId" v-if="false"/>
-      <el-table-column label="抢购人购买id" align="center" prop="purchaseId" >
-<!--        <template slot-scope="scope">
-          <dict-tag :options="dict.type.pro_rushsale_buyfrom" :value="scope.row.purchaseId"/>
-        </template>-->
+      <el-table-column label="抢购人购买id" align="center" prop="purchaseId" v-if="false">
       </el-table-column>
+      <el-table-column label="商品名" align="center" prop="goodsName" />
+      <el-table-column label="商品id" align="center" prop="goodsId" v-if="false"/>
       <el-table-column label="收购商结算价" align="center" prop="payPrice">
         <template slot-scope="scope">
           <el-input v-model="scope.row.payPrice" @change="updateRow(scope.row,'')"/>
@@ -134,7 +133,7 @@
       </el-table-column>
       <el-table-column label="收购商" align="center" prop="payFrom">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.payFrom" @change="updateRow(scope.row,'payFrom')">
+          <el-select v-model="scope.row.payFrom" disabled>
             <el-option
               v-for="buyPeo in buyNameList"
               :key="buyPeo.userId"
@@ -157,11 +156,7 @@
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="中间价" align="center" prop="dealPrice">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.dealPrice" @change="updateRow(scope.row,'')"/>
-        </template>
-      </el-table-column>
+      <el-table-column label="中间价" align="center" prop="dealPrice"/>
       <el-table-column label="结算状态" align="center" prop="dealState">
         <template slot-scope="scope">
           <el-select v-model="form.dealState" @change="updateRowConfirm(scope.row,'dealState')">
@@ -186,6 +181,7 @@
           </el-select>
         </template>
       </el-table-column>
+      <el-table-column label="抢购人" align="center" prop="purchName"/>
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">

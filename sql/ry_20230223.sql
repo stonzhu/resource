@@ -778,9 +778,15 @@ create table pro_rush_goods
 /*==============================================================*/
 create table pro_rush_account
 (
-    account_id           bigint(20) not null auto_increment,
-    user_id              bigint(20),
-    dept_id              bigint(20),
+    account_id           bigint(20) not null auto_increment comment '账户id',
+    user_id              bigint(20) comment '用户id',
+    dept_id              bigint(20) comment '部门id',
+    account_num          varchar(30) comment '账户',
+    opening_bank         varchar(100) comment '开户行',
+    `owner`                varchar(50) comment '账户所有者',
+    phoneNum             varchar(12) comment '手机号',
+    idNum                varchar(18) comment '身份证号',
+    remainder            double(10,3) comment '余额',
     capital              bigint(20) comment '本金',
     income               double(10,3) comment '收入',
     profit               double(10,3) comment '利润',

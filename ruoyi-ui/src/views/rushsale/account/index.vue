@@ -1,34 +1,42 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="本金" prop="capital">
+      <el-form-item label="账户" prop="accountNum">
         <el-input
-          v-model="queryParams.capital"
-          placeholder="请输入本金"
+          v-model="queryParams.accountNum"
+          placeholder="请输入账户"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="收入" prop="income">
+      <el-form-item label="开户行" prop="openingBank">
         <el-input
-          v-model="queryParams.income"
-          placeholder="请输入收入"
+          v-model="queryParams.openingBank"
+          placeholder="请输入开户行"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="利润" prop="profit">
+      <el-form-item label="账户所有者" prop="owner">
         <el-input
-          v-model="queryParams.profit"
-          placeholder="请输入利润"
+          v-model="queryParams.owner"
+          placeholder="请输入账户所有者"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="净利润" prop="netProfit">
+      <el-form-item label="手机号" prop="phoneNum">
         <el-input
-          v-model="queryParams.netProfit"
-          placeholder="请输入净利润"
+          v-model="queryParams.phoneNum"
+          placeholder="请输入手机号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="身份证号" prop="idNum">
+        <el-input
+          v-model="queryParams.idNum"
+          placeholder="请输入身份证号"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -87,7 +95,13 @@
 
     <el-table v-loading="loading" :data="accountList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="accountId" />
+      <el-table-column label="账户id" align="center" prop="accountId" v-if="false"/>
+      <el-table-column label="账户" align="center" prop="accountNum" />
+      <el-table-column label="开户行" align="center" prop="openingBank" />
+      <el-table-column label="账户所有者" align="center" prop="owner" />
+      <el-table-column label="手机号" align="center" prop="phoneNum" />
+      <el-table-column label="身份证号" align="center" prop="idNum" />
+      <el-table-column label="余额" align="center" prop="remainder" />
       <el-table-column label="本金" align="center" prop="capital" />
       <el-table-column label="收入" align="center" prop="income" />
       <el-table-column label="利润" align="center" prop="profit" />
@@ -112,7 +126,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -124,11 +138,23 @@
     <!-- 添加或修改抢购资金账户对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="用户id" prop="userId">
-          <el-input v-model="form.userId" placeholder="请输入用户id" />
+        <el-form-item label="账户" prop="accountNum">
+          <el-input v-model="form.accountNum" placeholder="请输入账户" />
         </el-form-item>
-        <el-form-item label="部门id" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门id" />
+        <el-form-item label="开户行" prop="openingBank">
+          <el-input v-model="form.openingBank" placeholder="请输入开户行" />
+        </el-form-item>
+        <el-form-item label="账户所有者" prop="owner">
+          <el-input v-model="form.owner" placeholder="请输入账户所有者" />
+        </el-form-item>
+        <el-form-item label="手机号" prop="phoneNum">
+          <el-input v-model="form.phoneNum" placeholder="请输入手机号" />
+        </el-form-item>
+        <el-form-item label="身份证号" prop="idNum">
+          <el-input v-model="form.idNum" placeholder="请输入身份证号" />
+        </el-form-item>
+        <el-form-item label="余额" prop="remainder">
+          <el-input v-model="form.remainder" placeholder="请输入余额" />
         </el-form-item>
         <el-form-item label="本金" prop="capital">
           <el-input v-model="form.capital" placeholder="请输入本金" />
@@ -155,7 +181,7 @@
 </template>
 
 <script>
-import { listAccount, getAccount, delAccount, addAccount, updateAccount } from "@/api/rushsale/account";
+import {listAccount, getAccount, delAccount, addAccount, updateAccount, listAccountXiala} from "@/api/rushsale/account";
 
 export default {
   name: "Account",
@@ -183,10 +209,11 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        capital: null,
-        income: null,
-        profit: null,
-        netProfit: null,
+        accountNum: null,
+        openingBank: null,
+        owner: null,
+        phoneNum: null,
+        idNum: null,
       },
       // 表单参数
       form: {},
@@ -219,6 +246,12 @@ export default {
         accountId: null,
         userId: null,
         deptId: null,
+        accountNum: null,
+        openingBank: null,
+        owner: null,
+        phoneNum: null,
+        idNum: null,
+        remainder: null,
         capital: null,
         income: null,
         profit: null,

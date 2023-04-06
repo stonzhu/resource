@@ -10,20 +10,44 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 抢购资金账户对象 pro_rush_account
  * 
  * @author ruoyi
- * @date 2023-03-24
+ * @date 2023-04-03
  */
 public class ProRushAccount extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** 主键 */
+    /** $column.columnComment */
     private Long accountId;
 
-    /** 用户id */
+    /** $column.columnComment */
     private Long userId;
 
-    /** 部门id */
+    /** $column.columnComment */
     private Long deptId;
+
+    /** 账户 */
+    @Excel(name = "账户")
+    private String accountNum;
+
+    /** 开户行 */
+    @Excel(name = "开户行")
+    private String openingBank;
+
+    /** 账户所有者 */
+    @Excel(name = "账户所有者")
+    private String owner;
+
+    /** 手机号 */
+    @Excel(name = "手机号")
+    private String phoneNum;
+
+    /** 身份证号 */
+    @Excel(name = "身份证号")
+    private String idNum;
+
+    /** 余额 */
+    @Excel(name = "余额")
+    private BigDecimal remainder;
 
     /** 本金 */
     @Excel(name = "本金")
@@ -68,6 +92,60 @@ public class ProRushAccount extends BaseEntity
     {
         return deptId;
     }
+    public void setAccountNum(String accountNum) 
+    {
+        this.accountNum = accountNum;
+    }
+
+    public String getAccountNum() 
+    {
+        return accountNum;
+    }
+    public void setOpeningBank(String openingBank) 
+    {
+        this.openingBank = openingBank;
+    }
+
+    public String getOpeningBank() 
+    {
+        return openingBank;
+    }
+    public void setOwner(String owner) 
+    {
+        this.owner = owner;
+    }
+
+    public String getOwner() 
+    {
+        return owner;
+    }
+    public void setPhoneNum(String phoneNum) 
+    {
+        this.phoneNum = phoneNum;
+    }
+
+    public String getPhoneNum() 
+    {
+        return phoneNum;
+    }
+    public void setIdNum(String idNum) 
+    {
+        this.idNum = idNum;
+    }
+
+    public String getIdNum() 
+    {
+        return idNum;
+    }
+    public void setRemainder(BigDecimal remainder) 
+    {
+        this.remainder = remainder;
+    }
+
+    public BigDecimal getRemainder() 
+    {
+        return remainder;
+    }
     public void setCapital(Long capital) 
     {
         this.capital = capital;
@@ -111,6 +189,12 @@ public class ProRushAccount extends BaseEntity
             .append("accountId", getAccountId())
             .append("userId", getUserId())
             .append("deptId", getDeptId())
+            .append("accountNum", getAccountNum())
+            .append("openingBank", getOpeningBank())
+            .append("owner", getOwner())
+            .append("phoneNum", getPhoneNum())
+            .append("idNum", getIdNum())
+            .append("remainder", getRemainder())
             .append("capital", getCapital())
             .append("income", getIncome())
             .append("profit", getProfit())

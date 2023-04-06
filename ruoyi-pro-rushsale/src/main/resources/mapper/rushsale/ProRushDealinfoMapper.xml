@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="dealFrom"    column="deal_from"    />
         <result property="dealTo"    column="deal_to"    />
         <result property="dealNum"    column="deal_num"    />
+        <result property="accountNum"    column="account_num"    />
         <result property="dealType"    column="deal_type"    />
         <result property="handleOrderId"    column="handle_order_id"    />
         <result property="dealTime"    column="deal_time"    />
@@ -28,7 +29,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (select CONCAT(g.`name`,g.brand,g.model,g.color) from pro_rush_goods g where g.goods_id=pro_rush_dealinfo.goods_id) as goodsName,
                (select u.user_name from sys_user u where u.user_id=pro_rush_dealinfo.deal_from) as deal_from,
                (select u.user_name from sys_user u where u.user_id=pro_rush_dealinfo.deal_to) as deal_to,
-               deal_num, deal_type, handle_order_id, deal_time,deal_status, create_time, update_by, update_time, remark
+               deal_num,
+               account_num,
+               deal_type, handle_order_id, deal_time,deal_status, create_time, update_by, update_time, remark
         from pro_rush_dealinfo
     </sql>
 
@@ -59,6 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dealFrom != null">deal_from,</if>
             <if test="dealTo != null">deal_to,</if>
             <if test="dealNum != null">deal_num,</if>
+            <if test="accountNum != null">account_num,</if>
             <if test="dealType != null">deal_type,</if>
             <if test="handleOrderId != null">handle_order_id,</if>
             <if test="dealTime != null">deal_time,</if>
@@ -76,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dealFrom != null">#{dealFrom},</if>
             <if test="dealTo != null">#{dealTo},</if>
             <if test="dealNum != null">#{dealNum},</if>
+            <if test="accountNum != null">#{accountNum},</if>
             <if test="dealType != null">#{dealType},</if>
             <if test="handleOrderId != null">#{handleOrderId},</if>
             <if test="dealTime != null">#{dealTime},</if>
@@ -96,6 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dealFrom != null">deal_from = #{dealFrom},</if>
             <if test="dealTo != null">deal_to = #{dealTo},</if>
             <if test="dealNum != null">deal_num = #{dealNum},</if>
+            <if test="accountNum != null">account_num = #{accountNum},</if>
             <if test="dealType != null">deal_type = #{dealType},</if>
             <if test="dealTime != null">deal_time = #{dealTime},</if>
             <if test="dealStatus != null">deal_status=#{dealStatus},</if>
@@ -116,6 +122,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dealFrom != null">deal_from = #{dealFrom},</if>
             <if test="dealTo != null">deal_to = #{dealTo},</if>
             <if test="dealNum != null">deal_num = #{dealNum},</if>
+            <if test="accountNum != null">account_num = #{accountNum},</if>
             <if test="dealType != null">deal_type = #{dealType},</if>
             <if test="dealTime != null">deal_time = #{dealTime},</if>
             <if test="dealStatus != null">deal_status=#{dealStatus},</if>

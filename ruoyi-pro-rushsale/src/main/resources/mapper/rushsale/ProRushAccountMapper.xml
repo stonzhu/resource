@@ -8,6 +8,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="accountId"    column="account_id"    />
         <result property="userId"    column="user_id"    />
         <result property="deptId"    column="dept_id"    />
+        <result property="accountNum"    column="account_num"    />
+        <result property="openingBank"    column="opening_bank"    />
+        <result property="owner"    column="owner"    />
+        <result property="phoneNum"    column="phoneNum"    />
+        <result property="idNum"    column="idNum"    />
+        <result property="remainder"    column="remainder"    />
         <result property="capital"    column="capital"    />
         <result property="income"    column="income"    />
         <result property="profit"    column="profit"    />
@@ -19,29 +25,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectProRushAccountVo">
-        select account_id, user_id, dept_id, capital, income, profit, net_profit, create_time, update_by, update_time, remark from pro_rush_account
+        select account_id, user_id, dept_id, account_num, opening_bank, owner, phoneNum, idNum, remainder, capital, income, profit, net_profit, create_time, update_by, update_time, remark from pro_rush_account
     </sql>
 
     <select id="selectProRushAccountList" parameterType="ProRushAccount" resultMap="ProRushAccountResult">
         <include refid="selectProRushAccountVo"/>
         <where>  
-            <if test="capital != null "> and capital = #{capital}</if>
-            <if test="income != null "> and income = #{income}</if>
-            <if test="profit != null "> and profit = #{profit}</if>
-            <if test="netProfit != null "> and net_profit = #{netProfit}</if>
+            <if test="accountNum != null  and accountNum != ''"> and account_num like concat('%', #{accountNum}, '%')</if>
+            <if test="openingBank != null  and openingBank != ''"> and opening_bank like concat('%', #{openingBank}, '%')</if>
+            <if test="owner != null  and owner != ''"> and owner like concat('%', #{owner}, '%')</if>
+            <if test="phoneNum != null  and phoneNum != ''"> and phoneNum like concat('%', #{phoneNum}, '%')</if>
+            <if test="idNum != null  and idNum != ''"> and idNum like concat('%', #{idNum}, '%')</if>
         </where>
     </select>
     
+    <select id="selectProRushAccountByAccountNum" parameterType="String" resultMap="ProRushAccountResult">
+        <include refid="selectProRushAccountVo"/>
+        where account_num = #{accountNum}
+    </select>
     <select id="selectProRushAccountByAccountId" parameterType="Long" resultMap="ProRushAccountResult">
         <include refid="selectProRushAccountVo"/>
         where account_id = #{accountId}
     </select>
+
+
         
     <insert id="insertProRushAccount" parameterType="ProRushAccount" useGeneratedKeys="true" keyProperty="accountId">
         insert into pro_rush_account
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null">user_id,</if>
             <if test="deptId != null">dept_id,</if>
+            <if test="accountNum != null">account_num,</if>
+            <if test="openingBank != null">opening_bank,</if>
+            <if test="owner != null">owner,</if>
+            <if test="phoneNum != null">phoneNum,</if>
+            <if test="idNum != null">idNum,</if>
+            <if test="remainder != null">remainder,</if>
             <if test="capital != null">capital,</if>
             <if test="income != null">income,</if>
             <if test="profit != null">profit,</if>
@@ -54,6 +73,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null">#{userId},</if>
             <if test="deptId != null">#{deptId},</if>
+            <if test="accountNum != null">#{accountNum},</if>
+            <if test="openingBank != null">#{openingBank},</if>
+            <if test="owner != null">#{owner},</if>
+            <if test="phoneNum != null">#{phoneNum},</if>
+            <if test="idNum != null">#{idNum},</if>
+            <if test="remainder != null">#{remainder},</if>
             <if test="capital != null">#{capital},</if>
             <if test="income != null">#{income},</if>
             <if test="profit != null">#{profit},</if>
@@ -70,6 +95,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="userId != null">user_id = #{userId},</if>
             <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="accountNum != null">account_num = #{accountNum},</if>
+            <if test="openingBank != null">opening_bank = #{openingBank},</if>
+            <if test="owner != null">owner = #{owner},</if>
+            <if test="phoneNum != null">phoneNum = #{phoneNum},</if>
+            <if test="idNum != null">idNum = #{idNum},</if>
+            <if test="remainder != null">remainder = #{remainder},</if>
             <if test="capital != null">capital = #{capital},</if>
             <if test="income != null">income = #{income},</if>
             <if test="profit != null">profit = #{profit},</if>

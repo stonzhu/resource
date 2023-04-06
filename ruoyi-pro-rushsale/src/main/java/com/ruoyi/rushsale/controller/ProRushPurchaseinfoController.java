@@ -90,6 +90,14 @@ public class ProRushPurchaseinfoController extends BaseController
         return success(proRushPurchaseinfoService.selectProRushPurchaseinfoByPurchaseId(purchaseId));
     }
 
+    @PreAuthorize("@ss.hasPermi('rushsale:purchaseinfo:add')")
+    @GetMapping(value = "/handleCopy/{purchaseId}")
+    public AjaxResult handleCopy(@PathVariable("purchaseId") Long purchaseId)
+    {
+        ProRushPurchaseinfo proRushPurchaseinfo = proRushPurchaseinfoService.selectProRushPurchaseinfoByPurchaseId(purchaseId);
+        return success(proRushPurchaseinfoService.insertProRushPurchaseinfo(proRushPurchaseinfo));
+    }
+
     /**
      * 新增抢购人购买结算信息
      */
@@ -110,11 +118,12 @@ public class ProRushPurchaseinfoController extends BaseController
     public AjaxResult edit(@RequestBody ProRushPurchaseinfo proRushPurchaseinfo)
     {
         String type = proRushPurchaseinfo.getType();
-        if(Constants.PURCHASEINFO_UPDATE_ORDERNUM.equals(type)){//修改收购商
+        if(Constants.PURCHASEINFO_UPDATE_ORDERNUM.equals(type)){//修改收购商时触发
             proRushPurchaseinfo.setPurchName(null);//防止修改错用户名
             ProRushRushsale ProRushRushsale = new ProRushRushsale();
-            ProRushRushsale.setPurchaseId(proRushPurchaseinfo.getPurchaseId());
-            ProRushRushsale.setPayFrom(proRushPurchaseinfo.getOrderNum());
+            ProRushRushsale.setPurchaseId(proRushPurchaseinfo.getPurchaseId());//抢购信息id
+            ProRushRushsale.setPayFrom(proRushPurchaseinfo.getOrderNum());//收购商
+            ProRushRushsale.setDealPrice(proRushPurchaseinfo.getDealPrice());//中间价
             if(proRushRushsaleService.updateProRushRushsaleByConditon(ProRushRushsale)<1){
                 //创建出货信息单
                 proRushRushsaleService.insertProRushRushsale(ProRushRushsale);

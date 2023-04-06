@@ -11,7 +11,18 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="卖方" prop="dealFrom">
+      <el-form-item label="交易账户" prop="accountNum">
+        <el-select v-model="queryParams.accountNum" placeholder="请选择交易账户" clearable>
+          <el-option
+            v-for="dict in dict.type.pro_rushsale_buyfrom"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+
+        <el-form-item label="卖方" prop="dealFrom">
         <el-input
           v-model="queryParams.dealFrom"
           placeholder="请输入卖方"
@@ -96,6 +107,19 @@
       <el-table-column label="卖方" align="center" prop="dealFrom" />
       <el-table-column label="买方" align="center" prop="dealTo" />
       <el-table-column label="交易金额" align="center" prop="dealNum" />
+      <el-table-column label="交易账户" align="center" prop="accountNum">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.accountNum" :disabled="scope.row.accountNum!=undefined"  @change="updateRowConfirm(scope.row,'accountNum')">
+            <el-option
+              v-for="account in accountList"
+              :key="account.accountNum"
+              :label="account.accountNum+' '+account.owner"
+              :value="account.accountNum"
+            ></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+
       <el-table-column label="交易类型" align="center" prop="dealType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.pro_rush_dealtype" :value="scope.row.dealType"/>
@@ -171,6 +195,16 @@
         <el-form-item label="交易金额" prop="dealNum">
           <el-input v-model="form.dealNum" placeholder="请输入交易金额" />
         </el-form-item>
+        <el-form-item label="交易账户" prop="accountNum">
+          <el-select v-model="form.accountNum" placeholder="请选择交易账户">
+            <el-option
+              v-for="account in accountList"
+              :key="account.accountNum"
+              :label="account.accountNum+' '+account.owner"
+              :value="account.accountNum"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="交易类型" prop="dealType">
           <el-select v-model="form.dealType" placeholder="请选择交易类型-buy：我为买方 sale：我为卖方">
             <el-option
@@ -189,6 +223,16 @@
             placeholder="请选择交易时间">
           </el-date-picker>
         </el-form-item>
+        <el-form-item label="状态" prop="dealStatus">
+          <el-select v-model="form.dealStatus" placeholder="交易状态">
+            <el-option
+              v-for="dict in dict.type.pro_rush_dealstatus"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" placeholder="请输入备注" />
         </el-form-item>
@@ -203,6 +247,8 @@
 
 <script>
 import { listDealinfo, getDealinfo, delDealinfo, addDealinfo, updateDealinfo } from "@/api/rushsale/dealinfo";
+import {listAccountXiala} from "@/api/rushsale/account";
+import {updatePurchaseinfo} from "@/api/rushsale/purchaseinfo";
 
 export default {
   name: "Dealinfo",
@@ -223,6 +269,7 @@ export default {
       total: 0,
       // 抢购交易信息表格数据
       dealinfoList: [],
+      accountList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -234,6 +281,7 @@ export default {
         goodsId: null,
         dealFrom: null,
         dealTo: null,
+        accountNum: null,
         handleOrderId: null,
         dealTime: null,
       },
@@ -246,6 +294,7 @@ export default {
   },
   created() {
     this.getList();
+    this.getXialaList();
   },
   methods: {
     /** 查询抢购交易信息列表 */
@@ -255,6 +304,17 @@ export default {
         this.dealinfoList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    //获取下拉列表 交易账户
+    getXialaList(){
+      listAccountXiala().then(response => {
+        //过滤
+        var index;
+        for(index in response.accountList){
+          this.accountList.push({"accountNum":response.accountList[index].accountNum+'',
+            "owner":response.accountList[index].owner,"openingBank":response.accountList[index].openingBank});
+        }
       });
     },
     // 取消按钮
@@ -272,7 +332,9 @@ export default {
         dealFrom: null,
         dealTo: null,
         dealNum: null,
+        accountNum:null,
         dealType: null,
+        dealStatus: null,
         handleOrderId: null,
         dealTime: null,
         createTime: null,
@@ -282,6 +344,7 @@ export default {
       };
       this.resetForm("form");
     },
+
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
@@ -349,6 +412,29 @@ export default {
       this.download('rushsale/dealinfo/export', {
         ...this.queryParams
       }, `dealinfo_${new Date().getTime()}.xlsx`)
+    },
+    /** 修改操作 */
+    updateRowConfirm(row,type) {
+      this.$confirm('是否继续修改?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.type = type;
+        updateDealinfo(row).then(response => {
+          //this.$modal.msgSuccess("修改成功");
+          this.getList();
+        });
+        this.$message({
+          type: 'success',
+          message: '修改成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消修改'
+        });
+      });
     }
   }
 };

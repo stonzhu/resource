@@ -23,7 +23,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectProRushRushsaleVo">
-        select rushsale_id, user_id, dept_id, purchase_id, pay_price, pay_time, pay_from, pay_type, deal_price, deal_state, rush_state, create_time, update_by, update_time, remark from pro_rush_rushsale
+        select rushsale_id, pro_rush_rushsale.user_id, pro_rush_rushsale.dept_id, pro_rush_rushsale.purchase_id,
+               purchase.goods_id as goodsId,
+               (select CONCAT(g.`name`,g.brand,g.model,g.color) from pro_rush_goods g where g.goods_id=purchase.goods_id) as goodsName,
+               (select u.user_name from sys_user u where u.user_id=purchase.purch_name) as purchName,
+               pay_price, pay_time,
+               pay_from, pay_type,
+               pro_rush_rushsale.deal_price, pro_rush_rushsale.deal_state, pro_rush_rushsale.rush_state,
+               pro_rush_rushsale.create_time, pro_rush_rushsale.update_by, pro_rush_rushsale.update_time, pro_rush_rushsale.remark
+        from pro_rush_rushsale left join pro_rush_purchaseinfo purchase
+on purchase.purchase_id=pro_rush_rushsale.purchase_id
     </sql>
 
     <select id="selectProRushRushsaleList" parameterType="ProRushRushsale" resultMap="ProRushRushsaleResult">

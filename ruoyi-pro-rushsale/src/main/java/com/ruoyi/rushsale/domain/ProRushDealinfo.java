@@ -41,8 +41,11 @@ public class ProRushDealinfo extends BaseEntity
     private String dealTo;
 
     /** 交易金额 */
+
     @Excel(name = "交易金额")
     private String dealNum;
+    @Excel(name = "交易账户")
+    private String accountNum;
 
     /** 交易类型-buy：我为买方 sale：我为卖方 */
     @Excel(name = "交易类型-buy：我为买方 sale：我为卖方")
@@ -60,6 +63,15 @@ public class ProRushDealinfo extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "交易时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date dealTime;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getGoodsName() {
         return goodsName;
@@ -140,7 +152,16 @@ public class ProRushDealinfo extends BaseEntity
     {
         return dealNum;
     }
-    public void setDealType(String dealType) 
+
+    public String getAccountNum() {
+        return accountNum;
+    }
+
+    public void setAccountNum(String accountNum) {
+        this.accountNum = accountNum;
+    }
+
+    public void setDealType(String dealType)
     {
         this.dealType = dealType;
     }

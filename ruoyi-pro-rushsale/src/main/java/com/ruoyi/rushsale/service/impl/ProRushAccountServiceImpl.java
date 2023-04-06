@@ -12,7 +12,7 @@ import com.ruoyi.rushsale.service.IProRushAccountService;
  * 抢购资金账户Service业务层处理
  * 
  * @author ruoyi
- * @date 2023-03-24
+ * @date 2023-04-03
  */
 @Service
 public class ProRushAccountServiceImpl implements IProRushAccountService 
@@ -31,6 +31,12 @@ public class ProRushAccountServiceImpl implements IProRushAccountService
     {
         return proRushAccountMapper.selectProRushAccountByAccountId(accountId);
     }
+    @Override
+    public ProRushAccount selectProRushAccountByAccountNum(String accountNum)
+    {
+        return proRushAccountMapper.selectProRushAccountByAccountNum(accountNum);
+    }
+
 
     /**
      * 查询抢购资金账户列表

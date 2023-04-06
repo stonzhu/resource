@@ -1,9 +1,17 @@
 package com.ruoyi.rushsale.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.rushsale.common.constant.Constants;
+import com.ruoyi.rushsale.domain.ProRushAccount;
+import com.ruoyi.rushsale.domain.ProRushGoods;
+import com.ruoyi.rushsale.service.IProRushAccountService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -33,6 +41,8 @@ public class ProRushDealinfoController extends BaseController
 {
     @Autowired
     private IProRushDealinfoService proRushDealinfoService;
+    @Autowired
+    private IProRushAccountService proRushAccountService;
 
     /**
      * 查询抢购交易信息列表
@@ -88,7 +98,56 @@ public class ProRushDealinfoController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody ProRushDealinfo proRushDealinfo)
     {
+        String type = proRushDealinfo.getType();
+        //修改交易账户
+        if(Constants.UPDATE_ACCOUNTNUM.equals(type) || Constants.UPDATE_DEALCANCEL.equals(type)){
+            updateAccount(proRushDealinfo);
+        }
         return toAjax(proRushDealinfoService.updateProRushDealinfo(proRushDealinfo));
+    }
+
+    public void updateAccount(ProRushDealinfo proRushDealinfo){
+        String type = proRushDealinfo.getType();
+        //交易信息
+        String accoountNum = proRushDealinfo.getAccountNum();
+        String dealNum = proRushDealinfo.getDealNum();
+        BigDecimal dealPrice=new BigDecimal(dealNum);
+        String dealType = proRushDealinfo.getDealType();
+        //查询待修改账户信息
+        ProRushAccount account = proRushAccountService.selectProRushAccountByAccountNum(accoountNum);
+        BigDecimal netProfit = account.getNetProfit();//净利润
+        BigDecimal profit = account.getProfit();//利润
+        BigDecimal remainder = account.getRemainder();//余额
+        BigDecimal income = account.getIncome();//收入
+        Long capital = account.getCapital();//本金
+        //交易生效
+        if(Constants.UPDATE_ACCOUNTNUM.equals(type)){
+            if(Constants.DEAL_TYPE_BUY.equals(dealType)){
+                income.subtract(dealPrice);
+                remainder.subtract(dealPrice);
+            }
+            if(Constants.DEAL_TYPE_SALE.equals(dealType)){
+                income.add(dealPrice);
+                remainder.add(dealPrice);
+            }
+        }
+        //取消交易
+        if(Constants.UPDATE_DEALCANCEL.equals(type)){
+            if(Constants.DEAL_TYPE_BUY.equals(dealType)){
+                income.add(dealPrice);
+                remainder.add(dealPrice);
+            }
+            if(Constants.DEAL_TYPE_SALE.equals(dealType)){
+                income.subtract(dealPrice);
+                remainder.subtract(dealPrice);
+
+            }
+        }
+        //修改账户信息
+        account.setIncome(income);
+        account.setRemainder(remainder);
+        proRushAccountService.updateProRushAccount(account);
+
     }
 
     /**

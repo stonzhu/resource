@@ -152,9 +152,9 @@
           plain
           icon="el-icon-edit"
           size="mini"
-          @click="cheoceSellOut"
-          v-hasPermi="['rushsale:purchaseinfo:sellout']"
-        >选择收货人</el-button>
+          @click="handleCopy"
+          v-hasPermi="['rushsale:purchaseinfo:add']"
+        >复制一行</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -164,7 +164,7 @@
       <el-table-column label="主键" align="center" prop="purchaseId" v-if="false"/>
       <el-table-column label="购买人姓名id" align="center" prop="purchNameId" v-if="false"/>
       <el-table-column label="购买人姓名" align="center" prop="purchName"/>
-      <el-table-column label="购买人手机号" align="center" prop="phoneNum" />
+
       <el-table-column label="商品名称" align="center" prop="goodsName"/>
       <el-table-column label="商品品牌" align="center" prop="goodsBrand"/>
       <el-table-column label="商品型号" align="center" prop="goodsModel"/>
@@ -212,17 +212,6 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="运单号" align="center" prop="remark">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.remark" @change="updateRow(scope.row,'remark')"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="机器唯一码" align="center" prop="machineId">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.machineId" @change="updateRow(scope.row,'machineId')"/>
-        </template>
-
-      </el-table-column>
       <el-table-column label="订单状态" align="center" prop="orderState" >
         <template slot-scope="scope">
           <el-select v-model="scope.row.orderState" @change="updateRow(scope.row,'orderState')" >
@@ -272,6 +261,16 @@
           </el-date-picker>
         </template>
       </el-table-column>
+      <el-table-column label="运单号" align="center" prop="remark">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.remark" @change="updateRow(scope.row,'remark')"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="机器唯一码" align="center" prop="machineId">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.machineId" @change="updateRow(scope.row,'machineId')"/>
+        </template>
+      </el-table-column>
       <el-table-column label="抢购流转状态" align="center" prop="rushState">
         <template slot-scope="scope">
           <el-select v-model="scope.row.rushState" @change="updateRow(scope.row,'rushState')" >
@@ -284,16 +283,16 @@
           </el-select>
         </template>
       </el-table-column>
-
+      <el-table-column label="购买人手机号" align="center" prop="phoneNum" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="handleCopy(scope.row.purchaseId)"
             v-hasPermi="['rushsale:purchaseinfo:edit']"
-          >修改</el-button>
+          >新增一行</el-button>
           <el-button
             size="mini"
             type="text"
@@ -301,6 +300,7 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['rushsale:purchaseinfo:remove']"
           >删除</el-button>
+
         </template>
       </el-table-column>
     </el-table>
@@ -452,7 +452,7 @@
 </template>
 
 <script>
-import { listPurchaseinfo,listPurchase, getPurchaseinfo, delPurchaseinfo, addPurchaseinfo, updatePurchaseinfo } from "@/api/rushsale/purchaseinfo";
+import { listPurchaseinfo,listPurchase, getPurchaseinfo, delPurchaseinfo, addPurchaseinfo, updatePurchaseinfo,handleCopy } from "@/api/rushsale/purchaseinfo";
 import {getUser} from "@/api/system/user";
 import {listGoods} from "@/api/rushsale/goods";
 
@@ -613,14 +613,10 @@ export default {
         this.title = "修改抢购人购买结算信息";
       });
     },
-    /** 选择收货人按钮操作 */
-    cheoceSellOut(row) {
-      this.reset();
-      const purchaseId = row.purchaseId || this.ids
-      cheoceSellOut(purchaseId).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改抢购人购买结算信息";
+    /** 复制一行操作 */
+    handleCopy(purchaseId) {
+      handleCopy(purchaseId).then(response => {
+        this.getList();
       });
     },
 
@@ -660,6 +656,7 @@ export default {
         ...this.queryParams
       }, `purchaseinfo_${new Date().getTime()}.xlsx`)
     },
+
     /** 修改行信息 */
     updateRow(row,type){
       row.type = type;
@@ -678,11 +675,12 @@ export default {
         row.type = type;
         row.purchName =row.purchNameId;
         //校验数据，结算价不能为空
-        if(!row.dealPrice){
+        if(!row.dealPrice || row.dealPrice <0 ){
           this.$message({
             type: 'info',
             message: '结算价不能为空'
           });
+          this.getList();
           return;
         }
         updatePurchaseinfo(row).then(response => {

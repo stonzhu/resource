@@ -30,6 +30,9 @@ public class ProRushRushsale extends BaseEntity
     /** 抢购人购买id */
     @Excel(name = "抢购人购买id")
     private Long purchaseId;
+    private Long goodsId;
+    private String goodsName;
+    private String purchName;//抢购人姓名
 
     /** 收购商结算价 */
     @Excel(name = "收购商结算价")
@@ -66,6 +69,30 @@ public class ProRushRushsale extends BaseEntity
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Long getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(Long goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public String getPurchName() {
+        return purchName;
+    }
+
+    public void setPurchName(String purchName) {
+        this.purchName = purchName;
     }
 
     public void setRushsaleId(Long rushsaleId)

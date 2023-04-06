@@ -9,6 +9,13 @@ export function listAccount(query) {
   })
 }
 
+export function listAccountXiala(query) {
+  return request({
+    url: '/rushsale/account/xiala',
+    method: 'get',
+    params: query
+  })
+}
 // 查询抢购资金账户详细
 export function getAccount(accountId) {
   return request({
@@ -34,6 +41,8 @@ export function updateAccount(data) {
     data: data
   })
 }
+
+
 
 // 删除抢购资金账户
 export function delAccount(accountId) {
