@@ -115,21 +115,22 @@ public class ProRushDealinfoController extends BaseController
         String dealType = proRushDealinfo.getDealType();
         //查询待修改账户信息
         ProRushAccount account = proRushAccountService.selectProRushAccountByAccountNum(accoountNum);
-        BigDecimal netProfit = account.getNetProfit();//净利润
-        BigDecimal profit = account.getProfit();//利润
-        BigDecimal remainder = account.getRemainder();//余额
-        BigDecimal income = account.getIncome();//收入
-        Long capital = account.getCapital();//本金
+        BigDecimal netProfit = account.getNetProfit()==null?new BigDecimal(0):account.getNetProfit();//净利润
+        BigDecimal profit = account.getProfit()==null?new BigDecimal(0):account.getProfit();//利润
+        BigDecimal remainder = account.getRemainder()==null?new BigDecimal(0):account.getRemainder();//余额
+        BigDecimal income = account.getIncome()==null?new BigDecimal(0):account.getIncome();//收入
+        Long capital = account.getCapital()==null?0L:account.getCapital();//本金
         //交易生效
         if(Constants.UPDATE_ACCOUNTNUM.equals(type)){
             if(Constants.DEAL_TYPE_BUY.equals(dealType)){
-                income.subtract(dealPrice);
-                remainder.subtract(dealPrice);
+                income = income.subtract(dealPrice);
+                remainder = remainder.subtract(dealPrice);
             }
             if(Constants.DEAL_TYPE_SALE.equals(dealType)){
-                income.add(dealPrice);
-                remainder.add(dealPrice);
+                income = income.add(dealPrice);
+                remainder = remainder.add(dealPrice);
             }
+
         }
         //取消交易
         if(Constants.UPDATE_DEALCANCEL.equals(type)){

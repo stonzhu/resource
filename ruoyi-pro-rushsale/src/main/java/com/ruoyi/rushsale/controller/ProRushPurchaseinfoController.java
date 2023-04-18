@@ -148,6 +148,7 @@ public class ProRushPurchaseinfoController extends BaseController
             if(proRushDealinfoService.updateProRushDealinfoByCondition(proRushDealinfo)<1){//修改交易单状态
                 proRushDealinfoService.insertProRushDealinfo(proRushDealinfo);
             }
+
         }
         return toAjax(proRushPurchaseinfoService.updateProRushPurchaseinfo(proRushPurchaseinfo));
 

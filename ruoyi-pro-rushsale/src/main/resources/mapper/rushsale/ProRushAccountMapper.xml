@@ -25,7 +25,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectProRushAccountVo">
-        select account_id, user_id, dept_id, account_num, opening_bank, owner, phoneNum, idNum, remainder, capital, income, profit, net_profit, create_time, update_by, update_time, remark from pro_rush_account
+        select account_id, user_id, dept_id, account_num, opening_bank, owner,
+               phoneNum, idNum, remainder, capital, income,
+               profit,
+               net_profit, create_time, update_by, update_time, remark from pro_rush_account
     </sql>
 
     <select id="selectProRushAccountList" parameterType="ProRushAccount" resultMap="ProRushAccountResult">
@@ -110,7 +113,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null">remark = #{remark},</if>
         </trim>
-        where account_id = #{accountId}
+        where account_num = #{accountNum}
     </update>
 
     <delete id="deleteProRushAccountByAccountId" parameterType="Long">

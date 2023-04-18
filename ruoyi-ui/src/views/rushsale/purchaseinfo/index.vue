@@ -316,10 +316,10 @@
     <!-- 添加或修改抢购人购买结算信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="用户id" prop="userId">
+        <el-form-item label="用户id" prop="userId" v-if="false">
           <el-input v-model="form.userId" placeholder="请输入用户id" />
         </el-form-item>
-        <el-form-item label="部门id" prop="deptId">
+        <el-form-item label="部门id" prop="deptId"  v-if="false">
           <el-input v-model="form.deptId" placeholder="请输入部门id" />
         </el-form-item>
         <el-form-item label="购买人姓名" prop="purchName">
@@ -511,9 +511,9 @@ export default {
       formB: {},
       // 表单校验
       rules: {
-        remark: [
-          { required: true, message: "运单号不能为空", trigger: "blur" }
-        ]
+        // remark: [
+        //   { required: true, message: "运单号不能为空", trigger: "blur" }
+        // ]
       }
     };
   },
@@ -696,6 +696,7 @@ export default {
           type: 'info',
           message: '已取消修改'
         });
+        this.getList();
       });
     }
   },

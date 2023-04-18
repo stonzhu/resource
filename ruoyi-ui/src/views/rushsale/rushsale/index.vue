@@ -452,6 +452,7 @@ export default {
           type: 'info',
           message: '已取消修改'
         });
+        this.getList();
       });
     },
     /** 提交按钮 */

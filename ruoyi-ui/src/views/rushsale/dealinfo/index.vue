@@ -107,7 +107,8 @@
       <el-table-column label="卖方" align="center" prop="dealFrom" />
       <el-table-column label="买方" align="center" prop="dealTo" />
       <el-table-column label="交易金额" align="center" prop="dealNum" />
-      <el-table-column label="交易账户" align="center" prop="accountNum">
+      <el-table-column label="交易账户"
+                       align="center" prop="accountNum">
         <template slot-scope="scope">
           <el-select v-model="scope.row.accountNum" :disabled="scope.row.accountNum!=undefined"  @change="updateRowConfirm(scope.row,'accountNum')">
             <el-option
@@ -421,6 +422,8 @@ export default {
         type: 'warning'
       }).then(() => {
         row.type = type;
+        row.dealFrom=null;
+        row.dealTo=null;
         updateDealinfo(row).then(response => {
           //this.$modal.msgSuccess("修改成功");
           this.getList();
@@ -434,6 +437,7 @@ export default {
           type: 'info',
           message: '已取消修改'
         });
+        this.getList();
       });
     }
   }
