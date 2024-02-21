@@ -62,16 +62,22 @@ public class DataScopeAspect
         handleDataScope(point, controllerDataScope);
     }
 
+    /***
+     *  过滤数据权限
+     * @param joinPoint
+     * @param controllerDataScope
+     */
     protected void handleDataScope(final JoinPoint joinPoint, DataScope controllerDataScope)
     {
-        // 获取当前的用户
+        // 从缓存中获取当前的用户
         LoginUser loginUser = SecurityUtils.getLoginUser();
-        if (StringUtils.isNotNull(loginUser))
+        if (StringUtils.isNotNull(loginUser))//没有数据权限
         {
-            SysUser currentUser = loginUser.getUser();
+            SysUser currentUser = loginUser.getUser();// 当前操作用户
             // 如果是超级管理员，则不过滤数据
             if (StringUtils.isNotNull(currentUser) && !currentUser.isAdmin())
             {
+                // 获取数据权限条件
                 String permission = StringUtils.defaultIfEmpty(controllerDataScope.permission(), PermissionContextHolder.getContext());
                 dataScopeFilter(joinPoint, currentUser, controllerDataScope.deptAlias(),
                         controllerDataScope.userAlias(), permission);
@@ -112,6 +118,7 @@ public class DataScopeAspect
             }
             else if (DATA_SCOPE_CUSTOM.equals(dataScope))
             {
+                // 自定义数据范围
                 sqlString.append(StringUtils.format(
                         " OR {}.dept_id IN ( SELECT dept_id FROM sys_role_dept WHERE role_id = {} ) ", deptAlias,
                         role.getRoleId()));

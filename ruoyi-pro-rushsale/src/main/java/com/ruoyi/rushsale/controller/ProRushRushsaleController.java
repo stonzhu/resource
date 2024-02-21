@@ -101,9 +101,11 @@ public class ProRushRushsaleController extends BaseController
         if(Constants.UPDATE_DEALSTATE.equals(type)){
             ProRushDealinfo proRushDealinfo = new ProRushDealinfo();
             proRushDealinfo.setGoodsId(proRushRushsale.getGoodsId());
-            proRushDealinfo.setDealFrom(proRushRushsale.getPayFrom());
-            proRushDealinfo.setDealTo(getUserId().toString());
-            proRushDealinfo.setDealNum(proRushRushsale.getPayPrice());
+            proRushDealinfo.setDealFrom(getUserId().toString());
+            proRushDealinfo.setDealTo(proRushRushsale.getPayFrom());
+            proRushDealinfo.setDealNum(proRushRushsale.getPayPrice());//交易金额
+            //
+
             proRushDealinfo.setDealType(Constants.DEAL_TYPE_SALE);
             if(Constants.DEAL_STATUS_COMPLETE.equals(proRushRushsale.getDealState())){
                 proRushDealinfo.setDealStatus(Constants.DEAL_STATUS_VALID);
@@ -112,7 +114,8 @@ public class ProRushRushsaleController extends BaseController
             }
             proRushDealinfo.setDealTime(DateUtils.getNowDate());
             proRushDealinfo.setHandleOrderId(proRushRushsale.getRushsaleId());
-            if(proRushDealinfoService.updateProRushDealinfoByCondition(proRushDealinfo)<1){//修改交易单状态
+            if(proRushDealinfoService.updateProRushDealinfoByCondition(proRushDealinfo)<1 &&
+                    Constants.DEAL_STATUS_COMPLETE.equals(proRushRushsale.getDealState())){//修改交易单状态
                 proRushDealinfoService.insertProRushDealinfo(proRushDealinfo);
             }
 

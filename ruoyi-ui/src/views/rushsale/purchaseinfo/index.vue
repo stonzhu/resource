@@ -151,9 +151,10 @@
           type="warning"
           plain
           icon="el-icon-edit"
+          :disabled="single"
           size="mini"
           @click="handleCopy"
-          v-hasPermi="['rushsale:purchaseinfo:add']"
+          v-hasPermi="['rushsale:purchaseinfo:handleCopy']"
         >复制一行</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -162,9 +163,19 @@
     <el-table v-loading="loading" :data="purchaseinfoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主键" align="center" prop="purchaseId" v-if="false"/>
-      <el-table-column label="购买人姓名id" align="center" prop="purchNameId" v-if="false"/>
-      <el-table-column label="购买人姓名" align="center" prop="purchName"/>
-
+      <el-table-column label="购买人姓名" align="center" width="120px" prop="purchNameId">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.purchNameId" @change="updateRow(scope.row,'purchNameId')">
+            <el-option
+              v-for="buyPeo in buyNameList"
+              :key="buyPeo.userId"
+              :label="buyPeo.userName"
+              :value="buyPeo.userId"
+            ></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column label="购买人姓名" align="center" prop="purchName" v-if="false"/>
       <el-table-column label="商品名称" align="center" prop="goodsName"/>
       <el-table-column label="商品品牌" align="center" prop="goodsBrand"/>
       <el-table-column label="商品型号" align="center" prop="goodsModel"/>
@@ -189,7 +200,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="下单时间" align="center" prop="buyTime" width="180">
+      <el-table-column label="下单时间" align="center" prop="buyTime" width="120">
         <template slot-scope="scope">
           <el-date-picker clearable
                           v-model="scope.row.buyTime"
@@ -199,7 +210,7 @@
           </el-date-picker>
         </template>
       </el-table-column>
-      <el-table-column label="收货人" align="center" prop="orderNum" cell-style="1000px">
+      <el-table-column label="收货人" align="center" prop="orderNum" width="120px">
         <template slot-scope="scope">
           <el-select v-model="scope.row.orderNum" @change="updateRow(scope.row,'orderNum')">
             <el-option
@@ -212,7 +223,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="订单状态" align="center" prop="orderState" >
+      <el-table-column label="订单状态" align="center" width="120px" prop="orderState" >
         <template slot-scope="scope">
           <el-select v-model="scope.row.orderState" @change="updateRow(scope.row,'orderState')" >
             <el-option
@@ -224,7 +235,7 @@
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="结算状态" align="center" prop="dealState">
+      <el-table-column label="结算状态" align="center" width="120px" prop="dealState">
         <template slot-scope="scope">
           <el-select v-model="scope.row.dealState" @change="updateRowConfirm(scope.row,'dealState')" >
             <el-option
@@ -236,7 +247,7 @@
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="到货时间" align="center" prop="arrivalTime" width="180">
+      <el-table-column label="到货时间" align="center" prop="arrivalTime" width="120">
         <template slot-scope="scope">
           <el-date-picker clearable
                           v-model="scope.row.arrivalTime"
@@ -251,7 +262,7 @@
           <el-input v-model="scope.row.dealPrice" @change="updateRow(scope.row,'dealPrice')"/>
         </template>
       </el-table-column>
-      <el-table-column label="结算时间" align="center" prop="dealTime" width="180">
+      <el-table-column label="结算时间" align="center" prop="dealTime" width="120">
         <template slot-scope="scope">
           <el-date-picker clearable
                           v-model="scope.row.arrivalTime"
@@ -608,13 +619,17 @@ export default {
       this.reset();
       const purchaseId = row.purchaseId || this.ids
       getPurchaseinfo(purchaseId).then(response => {
+        this.goodsList = response.goodsList;
         this.form = response.data;
         this.open = true;
         this.title = "修改抢购人购买结算信息";
       });
     },
     /** 复制一行操作 */
-    handleCopy(purchaseId) {
+    handleCopy(row) {
+      this.reset();
+      const purchaseId = row.purchaseId || this.ids;
+      console.log(purchaseId)
       handleCopy(purchaseId).then(response => {
         this.getList();
       });

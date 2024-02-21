@@ -90,11 +90,12 @@ public class ProRushPurchaseinfoController extends BaseController
         return success(proRushPurchaseinfoService.selectProRushPurchaseinfoByPurchaseId(purchaseId));
     }
 
-    @PreAuthorize("@ss.hasPermi('rushsale:purchaseinfo:add')")
+    @PreAuthorize("@ss.hasPermi('rushsale:purchaseinfo:handleCopy')")
     @GetMapping(value = "/handleCopy/{purchaseId}")
     public AjaxResult handleCopy(@PathVariable("purchaseId") Long purchaseId)
     {
         ProRushPurchaseinfo proRushPurchaseinfo = proRushPurchaseinfoService.selectProRushPurchaseinfoByPurchaseId(purchaseId);
+        proRushPurchaseinfo.setDealState(Constants.DEAL_STATUS_NOT);
         return success(proRushPurchaseinfoService.insertProRushPurchaseinfo(proRushPurchaseinfo));
     }
 
@@ -145,7 +146,8 @@ public class ProRushPurchaseinfoController extends BaseController
             }
             proRushDealinfo.setDealTime(DateUtils.getNowDate());
             proRushDealinfo.setHandleOrderId(proRushPurchaseinfo.getPurchaseId());
-            if(proRushDealinfoService.updateProRushDealinfoByCondition(proRushDealinfo)<1){//修改交易单状态
+            if(proRushDealinfoService.updateProRushDealinfoByCondition(proRushDealinfo)<1 &&
+                    Constants.DEAL_STATUS_COMPLETE.equals(proRushPurchaseinfo.getDealState())){//修改交易单状态
                 proRushDealinfoService.insertProRushDealinfo(proRushDealinfo);
             }
 
@@ -213,7 +215,4 @@ public class ProRushPurchaseinfoController extends BaseController
         ajax.put("purchNameList",userLisr);
         return ajax;
     }
-
-    
-
 }

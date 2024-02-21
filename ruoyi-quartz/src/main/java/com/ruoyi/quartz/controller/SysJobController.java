@@ -46,6 +46,7 @@ public class SysJobController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(SysJob sysJob)
     {
+        // 排序
         startPage();
         List<SysJob> list = jobService.selectJobList(sysJob);
         return getDataTable(list);
@@ -55,10 +56,11 @@ public class SysJobController extends BaseController
      * 导出定时任务列表
      */
     @PreAuthorize("@ss.hasPermi('monitor:job:export')")
-    @Log(title = "定时任务", businessType = BusinessType.EXPORT)
+    @Log(title = "定时任务", businessType = BusinessType.EXPORT)//日志记录
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysJob sysJob)
     {
+
         List<SysJob> list = jobService.selectJobList(sysJob);
         ExcelUtil<SysJob> util = new ExcelUtil<SysJob>(SysJob.class);
         util.exportExcel(response, list, "定时任务");

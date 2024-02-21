@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.purchase.mapper.PurchaseRecordMapper">
+    
+    <resultMap type="PurchaseRecord" id="PurchaseRecordResult">
+        <result property="purchaseRecordId"    column="purchase_record_id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="goodsName"    column="goods_name"    />
+        <result property="normsModel"    column="norms_model"    />
+        <result property="unit"    column="unit"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="price"    column="price"    />
+        <result property="inDate"    column="in_date"    />
+        <result property="classType"    column="classType"    />
+        <result property="supplier"    column="supplier"    />
+        <result property="purchaser"    column="purchaser"    />
+        <result property="useTo"    column="use_to"    />
+        <result property="hasFapiao"    column="has_fapiao"    />
+        <result property="fapiao"    column="fapiao"    />
+        <result property="picture"    column="picture"    />
+    </resultMap>
+
+    <sql id="selectPurchaseRecordVo">
+        select purchase_record_id, goods_id, goods_name, norms_model, unit, quantity, price,in_date, classType, supplier, purchaser, use_to, has_fapiao, fapiao, picture from purchase_record
+    </sql>
+
+    <select id="selectPurchaseRecordList" parameterType="PurchaseRecord" resultMap="PurchaseRecordResult">
+        <include refid="selectPurchaseRecordVo"/>
+        <where>  
+            <if test="goodsId != null "> and goods_id = #{goodsId}</if>
+            <if test="goodsName != null  and goodsName != ''"> and goods_name like concat('%', #{goodsName}, '%')</if>
+            <if test="normsModel != null  and normsModel != ''"> and norms_model = #{normsModel}</if>
+            <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
+            <if test="quantity != null  and quantity != ''"> and quantity = #{quantity}</if>
+            <if test="price != null  and price != ''"> and price = #{price}</if>
+            <if test="inDate != null  and inDate != ''"> and in_date = #{inDate}</if>
+            <if test="classType != null  and classType != ''"> and classType = #{classType}</if>
+            <if test="supplier != null  and supplier != ''"> and supplier = #{supplier}</if>
+            <if test="purchaser != null  and purchaser != ''"> and purchaser = #{purchaser}</if>
+            <if test="useTo != null  and useTo != ''"> and use_to = #{useTo}</if>
+            <if test="hasFapiao != null  and hasFapiao != ''"> and has_fapiao = #{hasFapiao}</if>
+            <if test="fapiao != null  and fapiao != ''"> and fapiao = #{fapiao}</if>
+            <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
+        </where>
+    </select>
+
+    <select id="selectPurchaseRecordListForValid" parameterType="PurchaseRecord" resultMap="PurchaseRecordResult">
+        <include refid="selectPurchaseRecordVo"/>
+        <where>
+            goods_name =#{goodsName}
+            and norms_model = #{normsModel}
+            and unit = #{unit}
+            and quantity = #{quantity}
+            and in_date = #{inDate}
+            and classType = #{classType}
+            and supplier = #{supplier}
+            and purchaser = #{purchaser}
+            and use_to = #{useTo}
+        </where>
+    </select>
+
+    <select id="selectPurchaseRecordByPurchaseRecordId" parameterType="Long" resultMap="PurchaseRecordResult">
+        <include refid="selectPurchaseRecordVo"/>
+        where purchase_record_id = #{purchaseRecordId}
+    </select>
+        
+    <insert id="insertPurchaseRecord" parameterType="PurchaseRecord" useGeneratedKeys="true" keyProperty="purchaseRecordId">
+        insert into purchase_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">goods_id,</if>
+            <if test="goodsName != null and goodsName != ''">goods_name,</if>
+            <if test="normsModel != null">norms_model,</if>
+            <if test="unit != null">unit,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="price != null">price,</if>
+            <if test="inDate != null">in_date,</if>
+            <if test="classType != null">classType,</if>
+            <if test="supplier != null and supplier != ''">supplier,</if>
+            <if test="purchaser != null and purchaser != ''">purchaser,</if>
+            <if test="useTo != null">use_to,</if>
+            <if test="hasFapiao != null">has_fapiao,</if>
+            <if test="fapiao != null">fapiao,</if>
+            <if test="picture != null">picture,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="goodsName != null and goodsName != ''">#{goodsName},</if>
+            <if test="normsModel != null">#{normsModel},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="price != null">#{price},</if>
+            <if test="inDate != null">#{inDate},</if>
+            <if test="classType != null">#{classType},</if>
+            <if test="supplier != null and supplier != ''">#{supplier},</if>
+            <if test="purchaser != null and purchaser != ''">#{purchaser},</if>
+            <if test="useTo != null">#{useTo},</if>
+            <if test="hasFapiao != null">#{hasFapiao},</if>
+            <if test="fapiao != null">#{fapiao},</if>
+            <if test="picture != null">#{picture},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePurchaseRecord" parameterType="PurchaseRecord">
+        update purchase_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="goodsName != null and goodsName != ''">goods_name = #{goodsName},</if>
+            <if test="normsModel != null">norms_model = #{normsModel},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="inDate != null">price = #{inDate},</if>
+            <if test="classType != null">classType = #{classType},</if>
+            <if test="supplier != null and supplier != ''">supplier = #{supplier},</if>
+            <if test="purchaser != null and purchaser != ''">purchaser = #{purchaser},</if>
+            <if test="useTo != null">use_to = #{useTo},</if>
+            <if test="hasFapiao != null">has_fapiao = #{hasFapiao},</if>
+            <if test="fapiao != null">fapiao = #{fapiao},</if>
+            <if test="picture != null">picture = #{picture},</if>
+        </trim>
+        where purchase_record_id = #{purchaseRecordId}
+    </update>
+
+    <delete id="deletePurchaseRecordByPurchaseRecordId" parameterType="Long">
+        delete from purchase_record where purchase_record_id = #{purchaseRecordId}
+    </delete>
+
+    <delete id="deletePurchaseRecordByPurchaseRecordIds" parameterType="String">
+        delete from purchase_record where purchase_record_id in 
+        <foreach item="purchaseRecordId" collection="array" open="(" separator="," close=")">
+            #{purchaseRecordId}
+        </foreach>
+    </delete>
+</mapper>

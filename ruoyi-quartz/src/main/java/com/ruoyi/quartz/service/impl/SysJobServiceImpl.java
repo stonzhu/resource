@@ -78,12 +78,17 @@ public class SysJobServiceImpl implements ISysJobService
     @Transactional(rollbackFor = Exception.class)
     public int pauseJob(SysJob job) throws SchedulerException
     {
+        // 获取所有任务组成员
         Long jobId = job.getJobId();
+        // 从调度器中查询该任务组名下的所有任务
         String jobGroup = job.getJobGroup();
+        // 记录到调度器中，让它从属性中移除该任务组名
         job.setStatus(ScheduleConstants.Status.PAUSE.getValue());
+        // 将该任务移除到任务组中
         int rows = jobMapper.updateJob(job);
         if (rows > 0)
         {
+            // 从调度器中移除该任务组名
             scheduler.pauseJob(ScheduleUtils.getJobKey(jobId, jobGroup));
         }
         return rows;
@@ -95,9 +100,10 @@ public class SysJobServiceImpl implements ISysJobService
      * @param job 调度信息
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)// 这里的事务处理是异常的根本，所以如果你的业务代码有返回值或返回空数据的根本不会被执行。
     public int resumeJob(SysJob job) throws SchedulerException
     {
+        // 获取所有任务组名下的所有任务
         Long jobId = job.getJobId();
         String jobGroup = job.getJobGroup();
         job.setStatus(ScheduleConstants.Status.NORMAL.getValue());

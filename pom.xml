@@ -181,6 +181,7 @@
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
         <module>ruoyi-pro-rushsale</module>
+        <module>wms</module>
     </modules>
     <packaging>pom</packaging>
 

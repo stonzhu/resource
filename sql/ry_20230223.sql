@@ -705,7 +705,7 @@ create table gen_table_column (
 drop table if exists pro_rush_sale;
 create table pro_rush_sale (
        pro_rush_sale_id      bigint(20)          not null auto_increment    comment '抢购买卖ID',
-       user_id      bigint(20)          default ''    comment '用户ID',
+       user_id      bigint(20)          default null    comment '用户ID',
        dept_id      bigint(20)          default null    comment '部门id',
        goods_name      varchar(50)     default ''                   comment '物品名称',
        specs      varchar(50)     default ''                   comment '规格',

@@ -53,13 +53,14 @@ public class ProRushDealinfoServiceImpl implements IProRushDealinfoService
     @Override
     public int insertProRushDealinfo(ProRushDealinfo proRushDealinfo)
     {
+        //创建一个主要记录
         proRushDealinfo.setCreateTime(DateUtils.getNowDate());
+        //保存到数据库中
         return proRushDealinfoMapper.insertProRushDealinfo(proRushDealinfo);
     }
 
     /**
      * 修改抢购交易信息
-     * 
      * @param proRushDealinfo 抢购交易信息
      * @return 结果
      */

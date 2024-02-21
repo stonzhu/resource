@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.receive.mapper.ReceiveRecordMapper">
+    
+    <resultMap type="ReceiveRecord" id="ReceiveRecordResult">
+        <result property="id"    column="id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="goodsName"    column="goods_name"    />
+        <result property="normsModel"    column="norms_model"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="recipient"    column="recipient"    />
+        <result property="department"    column="department"    />
+        <result property="receiveTime"    column="receive_time"    />
+        <result property="useTo"    column="use_to"    />
+        <result property="approver"    column="approver"    />
+        <result property="handover"    column="handover"    />
+    </resultMap>
+
+    <sql id="selectReceiveRecordVo">
+        select id, goods_id, goods_name, norms_model, quantity, recipient, department, receive_time, use_to, approver, handover from receive_record
+    </sql>
+
+    <select id="selectReceiveRecordList" parameterType="ReceiveRecord" resultMap="ReceiveRecordResult">
+        <include refid="selectReceiveRecordVo"/>
+        <where>  
+            <if test="goodsName != null  and goodsName != ''"> and goods_name like concat('%', #{goodsName}, '%')</if>
+            <if test="normsModel != null  and normsModel != ''"> and norms_model = #{normsModel}</if>
+            <if test="recipient != null  and recipient != ''"> and recipient = #{recipient}</if>
+            <if test="department != null  and department != ''"> and department = #{department}</if>
+            <if test="receiveTime != null "> and receive_time = #{receiveTime}</if>
+            <if test="approver != null  and approver != ''"> and approver = #{approver}</if>
+            <if test="handover != null  and handover != ''"> and handover = #{handover}</if>
+        </where>
+    </select>
+    
+    <select id="selectReceiveRecordById" parameterType="Long" resultMap="ReceiveRecordResult">
+        <include refid="selectReceiveRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertReceiveRecord" parameterType="ReceiveRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into receive_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">goods_id,</if>
+            <if test="goodsName != null and goodsName != ''">goods_name,</if>
+            <if test="normsModel != null">norms_model,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="recipient != null and recipient != ''">recipient,</if>
+            <if test="department != null">department,</if>
+            <if test="receiveTime != null">receive_time,</if>
+            <if test="useTo != null">use_to,</if>
+            <if test="approver != null">approver,</if>
+            <if test="handover != null">handover,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="goodsName != null and goodsName != ''">#{goodsName},</if>
+            <if test="normsModel != null">#{normsModel},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="recipient != null and recipient != ''">#{recipient},</if>
+            <if test="department != null">#{department},</if>
+            <if test="receiveTime != null">#{receiveTime},</if>
+            <if test="useTo != null">#{useTo},</if>
+            <if test="approver != null">#{approver},</if>
+            <if test="handover != null">#{handover},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReceiveRecord" parameterType="ReceiveRecord">
+        update receive_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="goodsName != null and goodsName != ''">goods_name = #{goodsName},</if>
+            <if test="normsModel != null">norms_model = #{normsModel},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="recipient != null and recipient != ''">recipient = #{recipient},</if>
+            <if test="department != null">department = #{department},</if>
+            <if test="receiveTime != null">receive_time = #{receiveTime},</if>
+            <if test="useTo != null">use_to = #{useTo},</if>
+            <if test="approver != null">approver = #{approver},</if>
+            <if test="handover != null">handover = #{handover},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReceiveRecordById" parameterType="Long">
+        delete from receive_record where id = #{id}
+    </delete>
+
+    <delete id="deleteReceiveRecordByIds" parameterType="String">
+        delete from receive_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

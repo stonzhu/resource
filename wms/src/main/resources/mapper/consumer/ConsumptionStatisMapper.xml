@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.statis.mapper.ConsumptionStatisMapper">
+    
+    <resultMap type="ConsumptionStatis" id="ConsumptionStatisResult">
+        <result property="consumptionStatisId"    column="consumption_statis_id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="goodsName"    column="goods_name"    />
+        <result property="normsModel"    column="norms_model"    />
+        <result property="consumption"    column="consumption"    />
+        <result property="time"    column="time"    />
+        <result property="lowerLimit"    column="lower_limit"    />
+        <result property="upperLimit"    column="upper_limit"    />
+        <result property="state"    column="state"    />
+        <result property="reason"    column="reason"    />
+    </resultMap>
+
+    <sql id="selectConsumptionStatisVo">
+        select consumption_statis_id, goods_id, goods_name, norms_model, consumption, time, lower_limit, upper_limit, state, reason from consumption_statis
+    </sql>
+
+    <select id="selectConsumptionStatisList" parameterType="ConsumptionStatis" resultMap="ConsumptionStatisResult">
+        <include refid="selectConsumptionStatisVo"/>
+        <where>  
+            <if test="goodsName != null  and goodsName != ''"> and goods_name like concat('%', #{goodsName}, '%')</if>
+            <if test="normsModel != null  and normsModel != ''"> and norms_model = #{normsModel}</if>
+            <if test="state != null  and state != ''"> and state = #{state}</if>
+        </where>
+    </select>
+    
+    <select id="selectConsumptionStatisByConsumptionStatisId" parameterType="Long" resultMap="ConsumptionStatisResult">
+        <include refid="selectConsumptionStatisVo"/>
+        where consumption_statis_id = #{consumptionStatisId}
+    </select>
+        
+    <insert id="insertConsumptionStatis" parameterType="ConsumptionStatis" useGeneratedKeys="true" keyProperty="consumptionStatisId">
+        insert into consumption_statis
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">goods_id,</if>
+            <if test="goodsName != null and goodsName != ''">goods_name,</if>
+            <if test="normsModel != null and normsModel != ''">norms_model,</if>
+            <if test="consumption != null">consumption,</if>
+            <if test="time != null">time,</if>
+            <if test="lowerLimit != null">lower_limit,</if>
+            <if test="upperLimit != null">upper_limit,</if>
+            <if test="state != null">state,</if>
+            <if test="reason != null">reason,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="goodsName != null and goodsName != ''">#{goodsName},</if>
+            <if test="normsModel != null and normsModel != ''">#{normsModel},</if>
+            <if test="consumption != null">#{consumption},</if>
+            <if test="time != null">#{time},</if>
+            <if test="lowerLimit != null">#{lowerLimit},</if>
+            <if test="upperLimit != null">#{upperLimit},</if>
+            <if test="state != null">#{state},</if>
+            <if test="reason != null">#{reason},</if>
+         </trim>
+    </insert>
+
+    <update id="updateConsumptionStatis" parameterType="ConsumptionStatis">
+        update consumption_statis
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="goodsName != null and goodsName != ''">goods_name = #{goodsName},</if>
+            <if test="normsModel != null and normsModel != ''">norms_model = #{normsModel},</if>
+            <if test="consumption != null">consumption = #{consumption},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="lowerLimit != null">lower_limit = #{lowerLimit},</if>
+            <if test="upperLimit != null">upper_limit = #{upperLimit},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="reason != null">reason = #{reason},</if>
+        </trim>
+        where consumption_statis_id = #{consumptionStatisId}
+    </update>
+
+    <delete id="deleteConsumptionStatisByConsumptionStatisId" parameterType="Long">
+        delete from consumption_statis where consumption_statis_id = #{consumptionStatisId}
+    </delete>
+
+    <delete id="deleteConsumptionStatisByConsumptionStatisIds" parameterType="String">
+        delete from consumption_statis where consumption_statis_id in 
+        <foreach item="consumptionStatisId" collection="array" open="(" separator="," close=")">
+            #{consumptionStatisId}
+        </foreach>
+    </delete>
+</mapper>

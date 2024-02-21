@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goodsStatis.mapper.GoodsStatisMapper">
+    
+    <resultMap type="GoodsStatis" id="GoodsStatisResult">
+        <result property="goodsStatisId"    column="goods_statis_id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="goodsName"    column="goods_name"    />
+        <result property="normsModel"    column="norms_model"    />
+        <result property="total"    column="total"    />
+        <result property="remain"    column="remain"    />
+    </resultMap>
+
+    <sql id="selectGoodsStatisVo">
+        select goods_statis_id, goods_id, goods_name, norms_model, total, remain from goods_statis
+    </sql>
+
+    <select id="selectGoodsStatisList" parameterType="GoodsStatis" resultMap="GoodsStatisResult">
+        <include refid="selectGoodsStatisVo"/>
+        <where>  
+            <if test="goodsName != null  and goodsName != ''"> and goods_name like concat('%', #{goodsName}, '%')</if>
+            <if test="normsModel != null  and normsModel != ''"> and norms_model = #{normsModel}</if>
+            <if test="remain != null  and remain != ''"> and remain >= #{remain}</if>
+        </where>
+    </select>
+
+    <select id="selectGoodsStatisListByNameModel" parameterType="GoodsStatis" resultMap="GoodsStatisResult">
+        <include refid="selectGoodsStatisVo"/>
+        <where>
+            <if test="goodsId != null  and goodsId != ''"> and goods_id =#{goodsId} </if>
+            <if test="goodsName != null  and goodsName != ''"> and goods_name =#{goodsName} </if>
+            <if test="normsModel != null  and normsModel != ''"> and norms_model = #{normsModel}</if>
+        </where>
+    </select>
+
+    
+    <select id="selectGoodsStatisByGoodsStatisId" parameterType="Long" resultMap="GoodsStatisResult">
+        <include refid="selectGoodsStatisVo"/>
+        where goods_statis_id = #{goodsStatisId}
+    </select>
+        
+    <insert id="insertGoodsStatis" parameterType="GoodsStatis" useGeneratedKeys="true" keyProperty="goodsStatisId">
+        insert into goods_statis
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">goods_id,</if>
+            <if test="goodsName != null and goodsName != ''">goods_name,</if>
+            <if test="normsModel != null and normsModel != ''">norms_model,</if>
+            <if test="total != null">total,</if>
+            <if test="remain != null">remain,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="goodsName != null and goodsName != ''">#{goodsName},</if>
+            <if test="normsModel != null and normsModel != ''">#{normsModel},</if>
+            <if test="total != null">#{total},</if>
+            <if test="remain != null">#{remain},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGoodsStatis" parameterType="GoodsStatis">
+        update goods_statis
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="goodsName != null and goodsName != ''">goods_name = #{goodsName},</if>
+            <if test="normsModel != null and normsModel != ''">norms_model = #{normsModel},</if>
+            <if test="total != null">total = #{total},</if>
+            <if test="remain != null">remain = #{remain},</if>
+        </trim>
+        where goods_statis_id = #{goodsStatisId}
+    </update>
+
+    <delete id="deleteGoodsStatisByGoodsStatisId" parameterType="Long">
+        delete from goods_statis where goods_statis_id = #{goodsStatisId}
+    </delete>
+
+    <delete id="deleteGoodsStatisByGoodsStatisIds" parameterType="String">
+        delete from goods_statis where goods_statis_id in 
+        <foreach item="goodsStatisId" collection="array" open="(" separator="," close=")">
+            #{goodsStatisId}
+        </foreach>
+    </delete>
+</mapper>

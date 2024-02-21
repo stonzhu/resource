@@ -110,7 +110,7 @@
       <el-table-column label="交易账户"
                        align="center" prop="accountNum">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.accountNum" :disabled="scope.row.accountNum!=undefined"  @change="updateRowConfirm(scope.row,'accountNum')">
+          <el-select v-model="scope.row.accountNum" :disabled="scope.row.accountNum!=undefined&&scope.row.accountNum!=''"  @change="updateRowConfirm(scope.row,'accountNum')">
             <el-option
               v-for="account in accountList"
               :key="account.accountNum"
@@ -152,10 +152,11 @@
           <el-button
             size="mini"
             type="text"
+            :disabled="scope.row.accountNum==undefined||scope.row.accountNum==''"
             icon="el-icon-detail"
-            @click="handleDetail(scope.row.handleOrderId,scope.row.dealType)"
-            v-hasPermi="['rushsale:dealinfo:detail']"
-          >详情</el-button>
+            @click="updateRowConfirm(scope.row,'dealcancel')"
+            v-hasPermi="['rushsale:dealinfo:dealcancel']"
+          >撤销</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -247,7 +248,7 @@
 </template>
 
 <script>
-import { listDealinfo, getDealinfo, delDealinfo, addDealinfo, updateDealinfo } from "@/api/rushsale/dealinfo";
+import { listDealinfo, getDealinfo, delDealinfo, addDealinfo, updateDealinfo,handleReback } from "@/api/rushsale/dealinfo";
 import {listAccountXiala} from "@/api/rushsale/account";
 import {updatePurchaseinfo} from "@/api/rushsale/purchaseinfo";
 
@@ -266,6 +267,8 @@ export default {
       multiple: true,
       // 显示搜索条件
       showSearch: true,
+      //
+      dealFlag:false,
       // 总条数
       total: 0,
       // 抢购交易信息表格数据
@@ -376,6 +379,13 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改抢购交易信息";
+      });
+    },
+    handleReback(row){
+      this.reset();
+      const dealId = row.dealId || this.ids
+      handleReback(dealId).then(response => {
+        this.getList();
       });
     },
     /** 提交按钮 */

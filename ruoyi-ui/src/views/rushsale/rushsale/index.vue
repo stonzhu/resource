@@ -146,7 +146,7 @@
 
       <el-table-column label="结算方式" align="center" prop="payType">
         <template slot-scope="scope">
-          <el-select v-model="form.payType" @change="updateRow(scope.row,'')">
+          <el-select v-model="scope.row.payType" @change="updateRow(scope.row,'')">
             <el-option
               v-for="dict in dict.type.pro_rushsale_balance"
               :key="dict.value"
@@ -159,7 +159,7 @@
       <el-table-column label="中间价" align="center" prop="dealPrice"/>
       <el-table-column label="结算状态" align="center" prop="dealState">
         <template slot-scope="scope">
-          <el-select v-model="form.dealState" @change="updateRowConfirm(scope.row,'dealState')">
+          <el-select v-model="scope.row.dealState" @change="updateRowConfirm(scope.row,'dealState')">
             <el-option
               v-for="dict in dict.type.pro_rush_dealstate"
               :key="dict.value"

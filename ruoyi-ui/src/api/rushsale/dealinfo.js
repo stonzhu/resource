@@ -19,6 +19,14 @@ export function getDealinfo(dealId) {
   })
 }
 
+//撤销订单
+export function handleReback(){
+  return request({
+    url: '/rushsale/dealinfo/handleReback/' + dealId,
+    method: 'get'
+  })
+}
+
 // 新增抢购交易信息
 export function addDealinfo(data) {
   return request({

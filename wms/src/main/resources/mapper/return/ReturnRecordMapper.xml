@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.returnBack.mapper.ReturnRecordMapper">
+    
+    <resultMap type="ReturnRecord" id="ReturnRecordResult">
+        <result property="id"    column="id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="goodsName"    column="goods_name"    />
+        <result property="normsModel"    column="norms_model"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="returnPeople"    column="return_people"    />
+        <result property="returnTime"    column="return_time"    />
+        <result property="recipient"    column="recipient"    />
+        <result property="handover"    column="handover"    />
+        <result property="reason"    column="reason"    />
+    </resultMap>
+
+    <sql id="selectReturnRecordVo">
+        select id, goods_id, goods_name, norms_model, quantity, return_people, return_time, recipient, handover, reason from return_record
+    </sql>
+
+    <select id="selectReturnRecordList" parameterType="ReturnRecord" resultMap="ReturnRecordResult">
+        <include refid="selectReturnRecordVo"/>
+        <where>  
+            <if test="goodsName != null  and goodsName != ''"> and goods_name like concat('%', #{goodsName}, '%')</if>
+            <if test="normsModel != null  and normsModel != ''"> and norms_model = #{normsModel}</if>
+            <if test="returnPeople != null  and returnPeople != ''"> and return_people = #{returnPeople}</if>
+            <if test="returnTime != null "> and return_time = #{returnTime}</if>
+            <if test="recipient != null  and recipient != ''"> and recipient = #{recipient}</if>
+            <if test="handover != null  and handover != ''"> and handover = #{handover}</if>
+        </where>
+    </select>
+    
+    <select id="selectReturnRecordById" parameterType="Long" resultMap="ReturnRecordResult">
+        <include refid="selectReturnRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertReturnRecord" parameterType="ReturnRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into return_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">goods_id,</if>
+            <if test="goodsName != null and goodsName != ''">goods_name,</if>
+            <if test="normsModel != null">norms_model,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="returnPeople != null and returnPeople != ''">return_people,</if>
+            <if test="returnTime != null">return_time,</if>
+            <if test="recipient != null">recipient,</if>
+            <if test="handover != null and handover != ''">handover,</if>
+            <if test="reason != null">reason,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="goodsName != null and goodsName != ''">#{goodsName},</if>
+            <if test="normsModel != null">#{normsModel},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="returnPeople != null and returnPeople != ''">#{returnPeople},</if>
+            <if test="returnTime != null">#{returnTime},</if>
+            <if test="recipient != null">#{recipient},</if>
+            <if test="handover != null and handover != ''">#{handover},</if>
+            <if test="reason != null">#{reason},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReturnRecord" parameterType="ReturnRecord">
+        update return_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="goodsName != null and goodsName != ''">goods_name = #{goodsName},</if>
+            <if test="normsModel != null">norms_model = #{normsModel},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="returnPeople != null and returnPeople != ''">return_people = #{returnPeople},</if>
+            <if test="returnTime != null">return_time = #{returnTime},</if>
+            <if test="recipient != null">recipient = #{recipient},</if>
+            <if test="handover != null and handover != ''">handover = #{handover},</if>
+            <if test="reason != null">reason = #{reason},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReturnRecordById" parameterType="Long">
+        delete from return_record where id = #{id}
+    </delete>
+
+    <delete id="deleteReturnRecordByIds" parameterType="String">
+        delete from return_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

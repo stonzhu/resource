@@ -131,7 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null">remark = #{remark},</if>
         </trim>
-        where handle_order_id = #{handleOrderId}
+        where handle_order_id = #{handleOrderId} and deal_type = #{dealType}
     </update>
 
 

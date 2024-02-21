@@ -103,6 +103,8 @@ public class ProRushDealinfoController extends BaseController
         if(Constants.UPDATE_ACCOUNTNUM.equals(type) || Constants.UPDATE_DEALCANCEL.equals(type)){
             updateAccount(proRushDealinfo);
         }
+
+
         return toAjax(proRushDealinfoService.updateProRushDealinfo(proRushDealinfo));
     }
 
@@ -130,26 +132,33 @@ public class ProRushDealinfoController extends BaseController
                 income = income.add(dealPrice);
                 remainder = remainder.add(dealPrice);
             }
-
         }
+
         //取消交易
         if(Constants.UPDATE_DEALCANCEL.equals(type)){
+            proRushDealinfo.setAccountNum("");
             if(Constants.DEAL_TYPE_BUY.equals(dealType)){
-                income.add(dealPrice);
-                remainder.add(dealPrice);
+                income = income.add(dealPrice);
+                remainder = remainder.add(dealPrice);
             }
             if(Constants.DEAL_TYPE_SALE.equals(dealType)){
-                income.subtract(dealPrice);
-                remainder.subtract(dealPrice);
-
+                income = income.subtract(dealPrice);
+                remainder = remainder.subtract(dealPrice);
             }
         }
         //修改账户信息
         account.setIncome(income);
         account.setRemainder(remainder);
         proRushAccountService.updateProRushAccount(account);
-
     }
+
+//    @PreAuthorize("@ss.hasPermi('rushsale:dealinfo:edit')")
+//    @Log(title = "撤回交易信息", businessType = BusinessType.UPDATE)
+//    @PutMapping
+//    public AjaxResult handleReback(@RequestBody ProRushDealinfo proRushDealinfo)
+//    {
+//
+//    }
 
     /**
      * 删除抢购交易信息
