@@ -100,6 +100,18 @@ public class PurchaseRecordServiceImpl implements IPurchaseRecordService
     @Override
     public int updatePurchaseRecord(PurchaseRecord purchaseRecord)
     {
+        Long purchaseRecordId = purchaseRecord.getPurchaseRecordId();
+        //获取更新前的采购记录
+        PurchaseRecord purchaseRecordOld = purchaseRecordMapper.selectPurchaseRecordByPurchaseRecordId(purchaseRecordId);
+        Long goodsId = purchaseRecord.getGoodsId();
+        BigDecimal difference = new BigDecimal(purchaseRecord.getQuantity()).subtract(new BigDecimal(purchaseRecordOld.getQuantity()));
+        //更新商品库存统计表
+        PurchaseRecord purchaseRecordM = new PurchaseRecord();
+        purchaseRecordM.setPurchaseRecordId(purchaseRecordId);
+        purchaseRecordM.setGoodsName(purchaseRecord.getGoodsName());
+        purchaseRecordM.setNormsModel(purchaseRecord.getNormsModel());
+        purchaseRecordM.setQuantity(difference.toString());
+        updateGoodsStatis(purchaseRecord,goodsId);
         return purchaseRecordMapper.updatePurchaseRecord(purchaseRecord);
     }
 

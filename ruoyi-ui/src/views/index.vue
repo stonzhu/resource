@@ -53,9 +53,9 @@
           <div class="body">
             <p>
               <i class="el-icon-s-promotion"></i> 官网：<el-link
-                href="http://www.ruoyi.vip"
+                href="https://www.zzgx.gov.cn/"
                 target="_blank"
-                >http://www.ruoyi.vip</el-link
+                >https://www.zzgx.gov.cn/</el-link
               >
             </p>
 

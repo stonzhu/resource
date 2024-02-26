@@ -22,7 +22,6 @@ public class PurchaseRecord extends BaseEntity
     private Long purchaseRecordId;
 
     /** 商品ID */
-    @Excel(name = "商品ID")
     private Long goodsId;
 
     /** 商品名 */
@@ -75,7 +74,6 @@ public class PurchaseRecord extends BaseEntity
     private String fapiao;
 
     /** 商品图片 */
-    @Excel(name = "商品图片")
     private String picture;
 
     public void setPurchaseRecordId(Long purchaseRecordId) 

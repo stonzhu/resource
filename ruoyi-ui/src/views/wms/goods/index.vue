@@ -79,7 +79,7 @@
 
     <el-table v-loading="loading" :data="goodsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="商品id" align="center" prop="goodsId" />
+      <el-table-column label="商品id" align="center" prop="goodsId" v-if="false"/>
       <el-table-column label="商品名" align="center" prop="goodsName" />
       <el-table-column label="财务编码" align="center" prop="financeCode" />
       <el-table-column label="规格型号" align="center" prop="normsModel" />

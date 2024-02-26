@@ -61,6 +61,11 @@ public class ReceiveRecord extends BaseEntity
     /** 交接办理人 */
     @Excel(name = "交接办理人")
     private String handover;
+    /** 备注 */
+    @Excel(name = "备注")
+    private String remark;
+    private String receiveType;
+
 
     public void setId(Long id) 
     {
@@ -160,6 +165,24 @@ public class ReceiveRecord extends BaseEntity
     public String getHandover() 
     {
         return handover;
+    }
+
+    public String getReceiveType() {
+        return receiveType;
+    }
+
+    public void setReceiveType(String receiveType) {
+        this.receiveType = receiveType;
+    }
+
+    @Override
+    public String getRemark() {
+        return remark;
+    }
+
+    @Override
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     @Override

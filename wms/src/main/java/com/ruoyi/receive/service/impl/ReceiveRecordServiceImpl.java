@@ -3,8 +3,11 @@ package com.ruoyi.receive.service.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.ruoyi.goods.domain.OfficeGoods;
+import com.ruoyi.goods.mapper.OfficeGoodsMapper;
 import com.ruoyi.goodsStatis.domain.GoodsStatis;
 import com.ruoyi.goodsStatis.mapper.GoodsStatisMapper;
+import com.ruoyi.purchase.domain.PurchaseRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.receive.mapper.ReceiveRecordMapper;
@@ -24,6 +27,8 @@ public class ReceiveRecordServiceImpl implements IReceiveRecordService
     private ReceiveRecordMapper receiveRecordMapper;
     @Autowired
     private GoodsStatisMapper goodsStatisMapper;
+    @Autowired
+    private OfficeGoodsMapper officeGoodsMapper;
 
     /**
      * 查询领用记录
@@ -58,13 +63,11 @@ public class ReceiveRecordServiceImpl implements IReceiveRecordService
     @Override
     public int insertReceiveRecord(ReceiveRecord receiveRecord)
     {
-        //修改商品库存记录
-        GoodsStatis gs = new GoodsStatis();
-        gs.setGoodsId(receiveRecord.getGoodsId());
-        List<GoodsStatis> gsLIst = goodsStatisMapper.selectGoodsStatisListByNameModel(gs);
-        gs = gsLIst.get(0);
-        gs.setRemain(gs.getRemain().subtract(receiveRecord.getQuantity()));
-        goodsStatisMapper.updateGoodsStatis(gs);
+        //更新商品表，如果已存在返回id
+        Long goodsId = updateOfficeGoods(receiveRecord);
+        receiveRecord.setGoodsId(goodsId);
+        // 新增固定资产领用记录
+        //updateGoodsStatis(receiveRecord);
         return receiveRecordMapper.insertReceiveRecord(receiveRecord);
     }
 
@@ -77,7 +80,20 @@ public class ReceiveRecordServiceImpl implements IReceiveRecordService
     @Override
     public int updateReceiveRecord(ReceiveRecord receiveRecord)
     {
-        return receiveRecordMapper.updateReceiveRecord(receiveRecord);
+        String receiveType = receiveRecord.getReceiveType();
+        if(receiveType.equals("1")){
+            return receiveRecordMapper.updateReceiveRecord(receiveRecord);
+        }else {
+            //查询修改前的领用记录
+            ReceiveRecord oldReceiveRecord = receiveRecordMapper.selectReceiveRecordById(receiveRecord.getId());
+            BigDecimal difference = receiveRecord.getQuantity().subtract(oldReceiveRecord.getQuantity());
+            ReceiveRecord  record = new ReceiveRecord();
+            record.setGoodsId(receiveRecord.getGoodsId());
+            record.setQuantity(difference);
+            updateGoodsStatis(record);
+            return receiveRecordMapper.updateReceiveRecord(receiveRecord);
+        }
+
     }
 
     /**
@@ -102,5 +118,38 @@ public class ReceiveRecordServiceImpl implements IReceiveRecordService
     public int deleteReceiveRecordById(Long id)
     {
         return receiveRecordMapper.deleteReceiveRecordById(id);
+    }
+
+    //修改商品库存
+    public void updateGoodsStatis(ReceiveRecord receiveRecord){
+        //修改商品库存记录
+        GoodsStatis gs = new GoodsStatis();
+        gs.setGoodsId(receiveRecord.getGoodsId());
+        List<GoodsStatis> gsLIst = goodsStatisMapper.selectGoodsStatisListByNameModel(gs);
+        gs = gsLIst.get(0);
+        gs.setRemain(gs.getRemain().subtract(receiveRecord.getQuantity()));
+        goodsStatisMapper.updateGoodsStatis(gs);
+    }
+
+    //更新商品表
+    public Long updateOfficeGoods(ReceiveRecord ReceiveRecord){
+        //更新商品表
+        OfficeGoods goods = new OfficeGoods();
+        goods.setGoodsName(ReceiveRecord.getGoodsName());
+        goods.setNormsModel(ReceiveRecord.getNormsModel());
+        //goods.setPrice(ReceiveRecord.getPrice());
+        List<OfficeGoods> gdList = officeGoodsMapper.selectOfficeGoodsListByNameModel(goods);
+        Long goodsId = 0L;
+        if(gdList.size() == 0){
+            goods.setClassType("固定资产");
+            goods.setIsPublic("个人用");
+            //goods.setUnit(ReceiveRecord.getUnit());
+            //goods.setPrice(pur.getPrice());
+            officeGoodsMapper.insertOfficeGoods(goods);
+            goodsId = goods.getGoodsId();
+        }else{
+            goodsId = gdList.get(0).getGoodsId();
+        }
+        return goodsId;
     }
 }

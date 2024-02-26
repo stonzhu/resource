@@ -1,6 +1,14 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="商品名" prop="goodsName">
+        <el-input
+          v-model="queryParams.goodsName"
+          placeholder="请输入商品名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="规格型号" prop="normsModel">
         <el-input
           v-model="queryParams.normsModel"
@@ -17,14 +25,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="部门" prop="department">
+<!--      <el-form-item label="部门" prop="department">
         <el-input
           v-model="queryParams.department"
           placeholder="请输入部门"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="领用时间" prop="receiveTime">
         <el-date-picker clearable
           v-model="queryParams.receiveTime"
@@ -49,6 +57,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="是否固定资产" prop="receiveType">
+        <el-select v-model="queryParams.receiveType" placeholder="请选择" clearable>
+          <el-option
+            v-for="dict in receiveTypeOptions"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -64,7 +82,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['receive:receiveRecord:add']"
-        >新增</el-button>
+        >新增固定资产领用单</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -118,6 +136,14 @@
       <el-table-column label="用途" align="center" prop="useTo" />
       <el-table-column label="审批人" align="center" prop="approver" />
       <el-table-column label="交接办理人" align="center" prop="handover" />
+      <el-table-column label="备注" align="center" prop="remark">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" :content="scope.row.remark" placement="top">
+            <div>{{ scope.row.remark==null? "":scope.row.remark.substring(0, 5) }}</div>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否固定资产" align="center" prop="receiveType" v-if="false"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -143,8 +169,8 @@
     <!-- 添加或修改领用记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="商品ID" prop="goodsId">
-          <el-input v-model="form.goodsId" placeholder="请输入商品ID" />
+        <el-form-item label="商品名称" prop="goodsName">
+          <el-input v-model="form.goodsName" placeholder="请输入商品名称" />
         </el-form-item>
         <el-form-item label="规格型号" prop="normsModel">
           <el-input v-model="form.normsModel" placeholder="请输入规格型号" />
@@ -175,6 +201,19 @@
         <el-form-item label="交接办理人" prop="handover">
           <el-input v-model="form.handover" placeholder="请输入交接办理人" />
         </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" placeholder="请输入备注" />
+        </el-form-item>
+        <el-form-item label="是否固定资产" prop="remark">
+          <el-select v-model="form.receiveType" placeholder="请选择">
+            <el-option
+              v-for="dict in receiveTypeOptions"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -193,6 +232,7 @@ export default {
     return {
       // 遮罩层
       loading: true,
+      receiveTypeOptions: [{value:"1",label:"固定资产"},{value:"2",label:"非固定资产"}],
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -219,15 +259,14 @@ export default {
         department: null,
         receiveTime: null,
         approver: null,
-        handover: null
+        handover: null,
+        receiveType: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        goodsId: [
-          { required: true, message: "商品ID不能为空", trigger: "blur" }
-        ],
+
         goodsName: [
           { required: true, message: "商品名不能为空", trigger: "change" }
         ],
@@ -274,7 +313,9 @@ export default {
         receiveTime: null,
         useTo: null,
         approver: null,
-        handover: null
+        handover: null,
+        remark: null,
+        receiveType: null
       };
       this.resetForm("form");
     },
@@ -297,6 +338,7 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.form.receiveTime=new Date()
       this.open = true;
       this.title = "添加领用记录";
     },
@@ -321,6 +363,7 @@ export default {
               this.getList();
             });
           } else {
+            this.form.receiveType="1"
             addReceiveRecord(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

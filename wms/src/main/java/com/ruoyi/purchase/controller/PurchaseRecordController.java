@@ -119,4 +119,11 @@ public class PurchaseRecordController extends BaseController
         String message = purchaseRecordService.importPurRecords(purList, updateSupport);
         return success(message);
     }
+
+    @PostMapping("/importTemplate")
+    public void importTemplate(HttpServletResponse response)
+    {
+        ExcelUtil<PurchaseRecord> util = new ExcelUtil<PurchaseRecord>(PurchaseRecord.class);
+        util.importTemplateExcel(response, "采购数据");
+    }
 }

@@ -43,7 +43,7 @@
           v-hasPermi="['goodsStatis:goodsStatis:receive']"
         >领取</el-button>
       </el-col>
-      <el-col :span="1.5">
+<!--      <el-col :span="1.5">
         <el-button
           type="primary"
           plain
@@ -52,7 +52,7 @@
           @click="handleAdd"
           v-hasPermi="['goodsStatis:goodsStatis:add']"
         >新增库存</el-button>
-      </el-col>
+      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="success"
@@ -64,7 +64,7 @@
           v-hasPermi="['goodsStatis:goodsStatis:edit']"
         >修改</el-button>
       </el-col>
-      <el-col :span="1.5">
+<!--      <el-col :span="1.5">
         <el-button
           type="danger"
           plain
@@ -74,7 +74,7 @@
           @click="handleDelete"
           v-hasPermi="['goodsStatis:goodsStatis:remove']"
         >删除</el-button>
-      </el-col>
+      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="warning"

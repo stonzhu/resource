@@ -125,7 +125,7 @@
           v-hasPermi="['purchase:purchaseRecord:edit']"
         >修改</el-button>
       </el-col>
-      <el-col :span="1.5">
+<!--      <el-col :span="1.5">
         <el-button
           type="danger"
           plain
@@ -135,7 +135,7 @@
           @click="handleDelete"
           v-hasPermi="['purchase:purchaseRecord:remove']"
         >删除</el-button>
-      </el-col>
+      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -165,10 +165,10 @@
       <el-table-column label="商品ID" align="center" prop="goodsId" v-if="false" />
       <el-table-column label="商品名" align="center" prop="goodsName" />
       <el-table-column label="规格型号" align="center" prop="normsModel" />
-      <el-table-column label="单位" align="center" prop="unit" />
-      <el-table-column label="数量" align="center" prop="quantity" />
-      <el-table-column label="单价" align="center" prop="price" />
-      <el-table-column label="采购日期时间" align="center" prop="inDate" width="180">
+      <el-table-column label="单位" align="center" prop="unit" width="50" />
+      <el-table-column label="数量" align="center" prop="quantity" width="50"/>
+      <el-table-column label="单价" align="center" prop="price" width="50"/>
+      <el-table-column label="采购日期时间" align="center" prop="inDate" width="140">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.inDate, '{y}-{m}-{d}') }}</span>
         </template>
@@ -189,13 +189,13 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['purchase:purchaseRecord:edit']"
           >修改</el-button>
-          <el-button
+<!--          <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['purchase:purchaseRecord:remove']"
-          >删除</el-button>
+          >删除</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -246,7 +246,8 @@
           <el-input v-model="form.fapiao" placeholder="请输入相应发票" />
         </el-form-item>
         <el-form-item label="商品图片" prop="picture">
-          <el-input v-model="form.picture" placeholder="请输入商品图片" />
+<!--          <el-input v-model="form.picture" placeholder="请输入商品图片" />-->
+          <picture :purRecord="purRecord" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -255,7 +256,7 @@
       </div>
     </el-dialog>
 
-    <!-- 用户导入对话框 -->
+    <!-- 采购单导入对话框 -->
     <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body>
       <el-upload
         ref="upload"
@@ -290,9 +291,11 @@
 <script>
 import { listPurchaseRecord, getPurchaseRecord, delPurchaseRecord, addPurchaseRecord, updatePurchaseRecord,importPurchaseRecord } from "@/api/wms/purchaseRecord";
 import {getToken} from "@/utils/auth";
+import picture from "./picture/picture.vue";
 
 export default {
   name: "PurchaseRecord",
+  components: { picture},
   data() {
     return {
       // 遮罩层
@@ -328,6 +331,8 @@ export default {
         // 上传的地址
         url: process.env.VUE_APP_BASE_API + "/purchase/purchaseRecord/importData"
       },
+      //上传图片所用信息
+      purRecord: {},
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -440,7 +445,8 @@ export default {
     },
     /** 下载模板操作 */
     importTemplate() {
-      this.download('purchase/purchaseRecord/importTemplate', {
+      this.download('' +
+        '/purchaseRecord/importTemplate', {
       }, `template_${new Date().getTime()}.xlsx`)
     },
     // 文件上传中处理
