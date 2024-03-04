@@ -390,14 +390,19 @@ export default {
       const goodsStatisId = row.goodsStatisId || this.ids
       getGoodsStatis(goodsStatisId).then(response => {
         this.form = response.data;
+        //this.form.recipient = "宋丹";
+        //this.form.handover="苏瑞龙";
         this.openReceive = true;
         this.title = "领取商品";
       });
+      //this.form.receiveTime=new Date()
+
     },
     //领取商品的功能
-    submitReceiveForm(){
+    submitReceiveForm(row){
       var receiveNum= this.form.quantity;
-      var remainNum= this.goodsNum[0];
+      var remainNum= this.form.remain;
+
       if(remainNum>=receiveNum){
         addReceiveRecord(this.form).then(response => {
           this.$modal.msgSuccess("领取成功");

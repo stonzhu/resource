@@ -104,14 +104,18 @@ public class PurchaseRecordServiceImpl implements IPurchaseRecordService
         //获取更新前的采购记录
         PurchaseRecord purchaseRecordOld = purchaseRecordMapper.selectPurchaseRecordByPurchaseRecordId(purchaseRecordId);
         Long goodsId = purchaseRecord.getGoodsId();
-        BigDecimal difference = new BigDecimal(purchaseRecord.getQuantity()).subtract(new BigDecimal(purchaseRecordOld.getQuantity()));
+        int cj = Integer.parseInt(purchaseRecord.getQuantity())*Integer.parseInt(purchaseRecord.getXishu());
+        int cjOld = Integer.parseInt(purchaseRecordOld.getQuantity())*Integer.parseInt(purchaseRecordOld.getXishu());
+        BigDecimal difference = new BigDecimal(cj).subtract(new BigDecimal(cjOld));
         //更新商品库存统计表
         PurchaseRecord purchaseRecordM = new PurchaseRecord();
         purchaseRecordM.setPurchaseRecordId(purchaseRecordId);
         purchaseRecordM.setGoodsName(purchaseRecord.getGoodsName());
         purchaseRecordM.setNormsModel(purchaseRecord.getNormsModel());
         purchaseRecordM.setQuantity(difference.toString());
-        updateGoodsStatis(purchaseRecord,goodsId);
+        purchaseRecordM.setXishu("1");
+        purchaseRecordM.setUpdateBy("admim");
+        updateGoodsStatis(purchaseRecordM,goodsId);
         return purchaseRecordMapper.updatePurchaseRecord(purchaseRecord);
     }
 
@@ -230,16 +234,20 @@ public class PurchaseRecordServiceImpl implements IPurchaseRecordService
         List<GoodsStatis> gsList = goodsStatisMapper.selectGoodsStatisListByNameModel(gs);
         if(gsList.size() == 0){
             gs.setGoodsId(goodsId);
-            gs.setTotal(new BigDecimal(pur.getQuantity()));
-            gs.setRemain(new BigDecimal(pur.getQuantity()));
+            int zonshu = Integer.parseInt(pur.getQuantity())*Integer.parseInt(pur.getXishu());
+            gs.setTotal(new BigDecimal(zonshu));
+            gs.setRemain(new BigDecimal(zonshu));
             gs.setCreateBy(pur.getCreateBy());
             gs.setCreateTime(new Date());
             goodsStatisMapper.insertGoodsStatis(gs);
         }else{
             GoodsStatis gs2 = gsList.get(0);
-            gs2.setTotal(gs2.getTotal().add(new BigDecimal(pur.getQuantity())));
-            gs2.setRemain(gs2.getRemain().add(new BigDecimal(pur.getQuantity())));
+            int zonshu =Integer.parseInt(pur.getQuantity())*Integer.parseInt(pur.getXishu()) ;
+            gs2.setTotal(gs2.getTotal().add(new BigDecimal(zonshu)));
+            gs2.setRemain(gs2.getRemain().add(new BigDecimal(zonshu)));
             goodsStatisMapper.updateGoodsStatis(gs2);
+
+
         }
     }
 }

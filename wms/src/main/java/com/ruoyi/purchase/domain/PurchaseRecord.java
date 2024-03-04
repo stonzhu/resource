@@ -40,6 +40,10 @@ public class PurchaseRecord extends BaseEntity
     @Excel(name = "数量")
     private String quantity;
 
+    /** 散装数量 */
+    @Excel(name = "散装数量")
+    private String xishu;
+
     /** 单价 */
     @Excel(name = "单价")
     private String price;
@@ -210,6 +214,14 @@ public class PurchaseRecord extends BaseEntity
 
     public void setInDate(String inDate) {
         this.inDate = inDate;
+    }
+
+    public String getXishu() {
+        return xishu;
+    }
+
+    public void setXishu(String xishu) {
+        this.xishu = xishu;
     }
 
     @Override

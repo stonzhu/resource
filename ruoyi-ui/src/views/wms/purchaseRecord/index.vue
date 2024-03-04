@@ -1,14 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="商品ID" prop="goodsId">
-        <el-input
-          v-model="queryParams.goodsId"
-          placeholder="请输入商品ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item label="商品名" prop="goodsName">
         <el-input
           v-model="queryParams.goodsName"
@@ -41,14 +34,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="单价" prop="price">
-        <el-input
-          v-model="queryParams.price"
-          placeholder="请输入单价"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item label="供货方" prop="supplier">
         <el-input
           v-model="queryParams.supplier"
@@ -65,38 +51,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="用途" prop="useTo">
-        <el-input
-          v-model="queryParams.useTo"
-          placeholder="请输入用途"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="有无发票" prop="hasFapiao">
-        <el-input
-          v-model="queryParams.hasFapiao"
-          placeholder="请输入有无发票"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="相应发票" prop="fapiao">
-        <el-input
-          v-model="queryParams.fapiao"
-          placeholder="请输入相应发票"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="商品图片" prop="picture">
-        <el-input
-          v-model="queryParams.picture"
-          placeholder="请输入商品图片"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -167,6 +122,7 @@
       <el-table-column label="规格型号" align="center" prop="normsModel" />
       <el-table-column label="单位" align="center" prop="unit" width="50" />
       <el-table-column label="数量" align="center" prop="quantity" width="50"/>
+      <el-table-column label="散装数" align="center" prop="xishu" width="50"/>
       <el-table-column label="单价" align="center" prop="price" width="50"/>
       <el-table-column label="采购日期时间" align="center" prop="inDate" width="140">
         <template slot-scope="scope">
@@ -226,6 +182,9 @@
         <el-form-item label="数量" prop="quantity">
           <el-input v-model="form.quantity" placeholder="请输入数量" />
         </el-form-item>
+        <el-form-item label="散装数" prop="xishu">
+          <el-input v-model="form.xishu" placeholder="请输入散装数量" />
+        </el-form-item>
         <el-form-item label="单价" prop="price">
           <el-input v-model="form.price" placeholder="请输入单价" />
         </el-form-item>
@@ -235,7 +194,14 @@
         <el-form-item label="采购人" prop="purchaser">
           <el-input v-model="form.purchaser" placeholder="请输入采购人" />
         </el-form-item>
-
+        <el-form-item label="采购时间" prop="inDate">
+          <el-date-picker clearable
+                          v-model="form.inDate"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          placeholder="请选择采购时间">
+          </el-date-picker>
+        </el-form-item>
         <el-form-item label="用途" prop="useTo">
           <el-input v-model="form.useTo" placeholder="请输入用途" />
         </el-form-item>

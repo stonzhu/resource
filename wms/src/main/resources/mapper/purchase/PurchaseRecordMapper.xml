@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="normsModel"    column="norms_model"    />
         <result property="unit"    column="unit"    />
         <result property="quantity"    column="quantity"    />
+        <result property="xishu"    column="xishu"    />
         <result property="price"    column="price"    />
         <result property="inDate"    column="in_date"    />
         <result property="classType"    column="classType"    />
@@ -23,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPurchaseRecordVo">
-        select purchase_record_id, goods_id, goods_name, norms_model, unit, quantity, price,in_date, classType, supplier, purchaser, use_to, has_fapiao, fapiao, picture from purchase_record
+        select purchase_record_id, goods_id, goods_name, norms_model, unit, quantity,xishu, price,in_date, classType, supplier, purchaser, use_to, has_fapiao, fapiao, picture from purchase_record
     </sql>
 
     <select id="selectPurchaseRecordList" parameterType="PurchaseRecord" resultMap="PurchaseRecordResult">
@@ -34,6 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="normsModel != null  and normsModel != ''"> and norms_model = #{normsModel}</if>
             <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
             <if test="quantity != null  and quantity != ''"> and quantity = #{quantity}</if>
+            <if test="xishu != null  and xishu != ''"> and xishu = #{xishu}</if>
             <if test="price != null  and price != ''"> and price = #{price}</if>
             <if test="inDate != null  and inDate != ''"> and in_date = #{inDate}</if>
             <if test="classType != null  and classType != ''"> and classType = #{classType}</if>
@@ -74,6 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="normsModel != null">norms_model,</if>
             <if test="unit != null">unit,</if>
             <if test="quantity != null">quantity,</if>
+            <if test="xishu != null">xishu,</if>
             <if test="price != null">price,</if>
             <if test="inDate != null">in_date,</if>
             <if test="classType != null">classType,</if>
@@ -90,6 +93,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="normsModel != null">#{normsModel},</if>
             <if test="unit != null">#{unit},</if>
             <if test="quantity != null">#{quantity},</if>
+            <if test="xishu != null">#{xishu},</if>
             <if test="price != null">#{price},</if>
             <if test="inDate != null">#{inDate},</if>
             <if test="classType != null">#{classType},</if>
@@ -110,8 +114,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="normsModel != null">norms_model = #{normsModel},</if>
             <if test="unit != null">unit = #{unit},</if>
             <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="xishu != null">xishu = #{xishu},</if>
             <if test="price != null">price = #{price},</if>
-            <if test="inDate != null">price = #{inDate},</if>
+            <if test="inDate != null">in_date = #{inDate},</if>
             <if test="classType != null">classType = #{classType},</if>
             <if test="supplier != null and supplier != ''">supplier = #{supplier},</if>
             <if test="purchaser != null and purchaser != ''">purchaser = #{purchaser},</if>

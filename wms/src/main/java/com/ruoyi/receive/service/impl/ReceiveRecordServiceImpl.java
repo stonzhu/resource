@@ -66,8 +66,11 @@ public class ReceiveRecordServiceImpl implements IReceiveRecordService
         //更新商品表，如果已存在返回id
         Long goodsId = updateOfficeGoods(receiveRecord);
         receiveRecord.setGoodsId(goodsId);
+        //普通领用记录，需要更新库存
+        if("2".equals(receiveRecord.getReceiveType())||receiveRecord.getReceiveType()==null){
+            updateGoodsStatis(receiveRecord);
+        }
         // 新增固定资产领用记录
-        //updateGoodsStatis(receiveRecord);
         return receiveRecordMapper.insertReceiveRecord(receiveRecord);
     }
 

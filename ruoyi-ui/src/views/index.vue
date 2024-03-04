@@ -2,7 +2,7 @@
   <div class="app-container home">
     <el-row :gutter="20">
       <el-col :sm="24" :lg="24">
-        <h1>欢迎使用XXX系统</h1>
+        <h1>欢迎使用高新城开库房管理系统</h1>
         <hr />
       </el-col>
     </el-row>
