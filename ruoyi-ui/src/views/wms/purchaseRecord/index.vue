@@ -18,22 +18,15 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="单位" prop="unit">
-        <el-input
-          v-model="queryParams.unit"
-          placeholder="请输入单位"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="采购时间" prop="inDate">
+        <el-date-picker clearable
+                        v-model="queryParams.inDate"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        placeholder="请选择采购时间">
+        </el-date-picker>
       </el-form-item>
-      <el-form-item label="数量" prop="quantity">
-        <el-input
-          v-model="queryParams.quantity"
-          placeholder="请输入数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
 
       <el-form-item label="供货方" prop="supplier">
         <el-input

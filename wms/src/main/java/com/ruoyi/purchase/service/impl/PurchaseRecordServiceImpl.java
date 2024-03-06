@@ -79,6 +79,9 @@ public class PurchaseRecordServiceImpl implements IPurchaseRecordService
             Long goodsId = updateOfficeGoods(purchaseRecord);
             // 新增采购记录
             purchaseRecord.setGoodsId(goodsId);
+            if("".equals(purchaseRecord.getXishu())){
+                purchaseRecord.setXishu("1");
+            }
             purchaseRecordMapper.insertPurchaseRecord(purchaseRecord);
             //更新商品库存统计表
             updateGoodsStatis(purchaseRecord,goodsId);
@@ -104,6 +107,9 @@ public class PurchaseRecordServiceImpl implements IPurchaseRecordService
         //获取更新前的采购记录
         PurchaseRecord purchaseRecordOld = purchaseRecordMapper.selectPurchaseRecordByPurchaseRecordId(purchaseRecordId);
         Long goodsId = purchaseRecord.getGoodsId();
+        if("".equals(purchaseRecordOld.getXishu())){
+            purchaseRecordOld.setXishu("1");
+        }
         int cj = Integer.parseInt(purchaseRecord.getQuantity())*Integer.parseInt(purchaseRecord.getXishu());
         int cjOld = Integer.parseInt(purchaseRecordOld.getQuantity())*Integer.parseInt(purchaseRecordOld.getXishu());
         BigDecimal difference = new BigDecimal(cj).subtract(new BigDecimal(cjOld));
