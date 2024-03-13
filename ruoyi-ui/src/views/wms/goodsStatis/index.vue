@@ -94,6 +94,11 @@
       <el-table-column label="商品ID" align="center" prop="goodsId" v-if="false"/>
       <el-table-column label="商品名" align="center" prop="goodsName" />
       <el-table-column label="规格型号" align="center" prop="normsModel" />
+      <el-table-column label="商品图片" align="center" prop="picture">
+        <template slot-scope="scope">
+          <image-preview :src="scope.row.picture" :width="50" :height="50"/>
+        </template>
+      </el-table-column>
       <el-table-column label="总数量" align="center" prop="total" />
       <el-table-column label="剩余数量" align="center" prop="remain" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">

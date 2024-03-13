@@ -29,6 +29,10 @@ public class GoodsStatis extends BaseEntity
     /** 规格型号 */
     @Excel(name = "规格型号")
     private String normsModel;
+    /** 图片 */
+    @Excel(name = "图片")
+    private String picture;
+
 
     /** 总数量 */
     @Excel(name = "总数量")
@@ -70,7 +74,15 @@ public class GoodsStatis extends BaseEntity
         this.normsModel = normsModel;
     }
 
-    public String getNormsModel() 
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getNormsModel()
     {
         return normsModel;
     }

@@ -12,7 +12,7 @@ export function listGoods(query) {
 // 查询办公用品商品详细
 export function getGoods(goodsId) {
   return request({
-    url: '/goods/' + goodsId,
+    url: '/goods/goods/' + goodsId,
     method: 'get'
   })
 }

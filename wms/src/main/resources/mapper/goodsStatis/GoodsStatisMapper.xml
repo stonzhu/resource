@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="GoodsStatis" id="GoodsStatisResult">
         <result property="goodsStatisId"    column="goods_statis_id"    />
         <result property="goodsId"    column="goods_id"    />
+        <result property="picture"    column="picture"    />
         <result property="goodsName"    column="goods_name"    />
         <result property="normsModel"    column="norms_model"    />
         <result property="total"    column="total"    />
@@ -14,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectGoodsStatisVo">
-        select goods_statis_id, goods_id, goods_name, norms_model, total, remain from goods_statis
+        select goods_statis_id, goods_id, goods_name,picture, norms_model, total, remain from goods_statis
     </sql>
 
     <select id="selectGoodsStatisList" parameterType="GoodsStatis" resultMap="GoodsStatisResult">
@@ -47,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="goodsId != null">goods_id,</if>
             <if test="goodsName != null and goodsName != ''">goods_name,</if>
             <if test="normsModel != null and normsModel != ''">norms_model,</if>
+            <if test="picture != null and picture != ''">picture,</if>
             <if test="total != null">total,</if>
             <if test="remain != null">remain,</if>
          </trim>
@@ -54,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="goodsId != null">#{goodsId},</if>
             <if test="goodsName != null and goodsName != ''">#{goodsName},</if>
             <if test="normsModel != null and normsModel != ''">#{normsModel},</if>
+            <if test="picture != null and picture != ''">#{picture},</if>
             <if test="total != null">#{total},</if>
             <if test="remain != null">#{remain},</if>
          </trim>
@@ -65,6 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="goodsId != null">goods_id = #{goodsId},</if>
             <if test="goodsName != null and goodsName != ''">goods_name = #{goodsName},</if>
             <if test="normsModel != null and normsModel != ''">norms_model = #{normsModel},</if>
+            <if test="picture != null and picture != ''">picture = #{picture},</if>
             <if test="total != null">total = #{total},</if>
             <if test="remain != null">remain = #{remain},</if>
         </trim>

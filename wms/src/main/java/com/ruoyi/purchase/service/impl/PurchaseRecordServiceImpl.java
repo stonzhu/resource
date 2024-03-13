@@ -118,6 +118,7 @@ public class PurchaseRecordServiceImpl implements IPurchaseRecordService
         purchaseRecordM.setPurchaseRecordId(purchaseRecordId);
         purchaseRecordM.setGoodsName(purchaseRecord.getGoodsName());
         purchaseRecordM.setNormsModel(purchaseRecord.getNormsModel());
+        purchaseRecordM.setPicture(purchaseRecord.getPicture());
         purchaseRecordM.setQuantity(difference.toString());
         purchaseRecordM.setXishu("1");
         purchaseRecordM.setUpdateBy("admim");
@@ -216,6 +217,7 @@ public class PurchaseRecordServiceImpl implements IPurchaseRecordService
         OfficeGoods goods = new OfficeGoods();
         goods.setGoodsName(pur.getGoodsName());
         goods.setNormsModel(pur.getNormsModel());
+        goods.setPicture(pur.getPicture());
         goods.setPrice(pur.getPrice());
         List<OfficeGoods> gdList = officeGoodsMapper.selectOfficeGoodsListByNameModel(goods);
         Long goodsId = 0L;
@@ -237,6 +239,7 @@ public class PurchaseRecordServiceImpl implements IPurchaseRecordService
         GoodsStatis gs = new GoodsStatis();
         gs.setGoodsName(pur.getGoodsName());
         gs.setNormsModel(pur.getNormsModel());
+        gs.setPicture(pur.getPicture());
         List<GoodsStatis> gsList = goodsStatisMapper.selectGoodsStatisListByNameModel(gs);
         if(gsList.size() == 0){
             gs.setGoodsId(goodsId);
@@ -249,10 +252,10 @@ public class PurchaseRecordServiceImpl implements IPurchaseRecordService
         }else{
             GoodsStatis gs2 = gsList.get(0);
             int zonshu =Integer.parseInt(pur.getQuantity())*Integer.parseInt(pur.getXishu()) ;
+            gs2.setPicture(pur.getPicture());
             gs2.setTotal(gs2.getTotal().add(new BigDecimal(zonshu)));
             gs2.setRemain(gs2.getRemain().add(new BigDecimal(zonshu)));
             goodsStatisMapper.updateGoodsStatis(gs2);
-
 
         }
     }

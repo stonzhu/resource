@@ -128,7 +128,11 @@
       <el-table-column label="用途" align="center" prop="useTo" />
       <el-table-column label="有无发票" align="center" prop="hasFapiao" />
       <el-table-column label="相应发票" align="center" prop="fapiao" />
-      <el-table-column label="商品图片" align="center" prop="picture" />
+      <el-table-column label="商品图片" align="center" prop="picture">
+        <template slot-scope="scope">
+          <image-preview :src="scope.row.picture" :width="50" :height="50"/>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -205,8 +209,7 @@
           <el-input v-model="form.fapiao" placeholder="请输入相应发票" />
         </el-form-item>
         <el-form-item label="商品图片" prop="picture">
-<!--          <el-input v-model="form.picture" placeholder="请输入商品图片" />-->
-          <picture :purRecord="purRecord" />
+          <image-upload v-model="form.picture"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

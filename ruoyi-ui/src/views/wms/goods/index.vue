@@ -87,7 +87,11 @@
       <el-table-column label="单价" align="center" prop="price" />
       <el-table-column label="类别" align="center" prop="classType" />
       <el-table-column label="公用or专用" align="center" prop="isPublic" />
-      <el-table-column label="商品图片" align="center" prop="picture" />
+      <el-table-column label="商品图片" align="center" prop="picture">
+        <template slot-scope="scope">
+          <image-preview :src="scope.row.picture" :width="50" :height="50"/>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -135,7 +139,7 @@
           <el-input v-model="form.isPublic" placeholder="请输入公用or专用" />
         </el-form-item>
         <el-form-item label="商品图片" prop="picture">
-          <el-input v-model="form.picture" placeholder="请输入商品图片" />
+          <image-upload v-model="form.picture"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
